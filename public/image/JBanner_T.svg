@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33px" height="42px" viewBox="0 0 33 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_success</title>
+    <defs>
+        <linearGradient x1="26.1681505%" y1="18.2908837%" x2="79.2462042%" y2="83.877826%" id="linearGradient-1">
+            <stop stop-color="#44E5AA" offset="0%"></stop>
+            <stop stop-color="#2DBC89" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="44.0420376%" y1="18.2908837%" x2="57.311551%" y2="83.877826%" id="linearGradient-2">
+            <stop stop-color="#2DBC89" offset="0%"></stop>
+            <stop stop-color="#44E5AA" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="26.1681505%" y1="42.0727209%" x2="79.2462042%" y2="58.4694565%" id="linearGradient-3">
+            <stop stop-color="#44E5AA" offset="0%"></stop>
+            <stop stop-color="#2DBC89" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="文案二备份" transform="translate(-316.000000, -247.000000)">
+            <g id="编组-25" transform="translate(18.000000, 237.000000)">
+                <g id="icon_success" transform="translate(298.000000, 10.000000)">
+                    <g id="编组-13" transform="translate(0.000000, -0.000000)">
+                        <g id="编组-10" transform="translate(0.000000, 2.478277)">
+                            <circle id="椭圆形" fill="url(#linearGradient-1)" fill-rule="nonzero" cx="15" cy="15" r="15"></circle>
+                            <polyline id="路径-12" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" transform="translate(15.000000, 13.472877) scale(-1, 1) rotate(-45.000000) translate(-15.000000, -13.472877) " points="11.9999997 7.47287725 11.9999997 19.4728773 17.9999997 19.4728773"></polyline>
+                        </g>
+                        <path d="M24.5463196,0 C25.0986043,0 25.5463196,0.397969111 25.5463196,0.888888889 L25.5463196,3.11111111 C25.5463196,3.60203089 25.0986043,4 24.5463196,4 C23.9940348,4 23.5463196,3.60203089 23.5463196,3.11111111 L23.5463196,0.888888889 C23.5463196,0.397969111 23.9940348,0 24.5463196,0 Z" id="路径-13" fill="url(#linearGradient-2)" fill-rule="nonzero"></path>
+                        <path d="M28.2963195,2.12131996 C28.8486042,2.12131996 29.2963195,2.51928907 29.2963195,3.01020885 L29.2963195,5.23243107 C29.2963195,5.72335085 28.8486042,6.12131996 28.2963195,6.12131996 C27.7440347,6.12131996 27.2963195,5.72335085 27.2963195,5.23243107 L27.2963195,3.01020885 C27.2963195,2.51928907 27.7440347,2.12131996 28.2963195,2.12131996 Z" id="路径-13备份" fill="url(#linearGradient-2)" fill-rule="nonzero" transform="translate(28.296319, 4.121320) rotate(45.000000) translate(-28.296319, -4.121320) "></path>
+                        <path d="M31.4074307,7.25 C31.8983505,7.25 32.2963196,7.69771525 32.2963196,8.25 C32.2963196,8.80228475 31.8983505,9.25 31.4074307,9.25 L29.1852085,9.25 C28.6942887,9.25 28.2963196,8.80228475 28.2963196,8.25 C28.2963196,7.69771525 28.6942887,7.25 29.1852085,7.25 L31.4074307,7.25 Z" id="路径-13备份-2" fill="url(#linearGradient-3)" fill-rule="nonzero"></path>
+                    </g>
+                    <ellipse id="椭圆形" fill="#CFE0D9" fill-rule="nonzero" cx="16" cy="40" rx="13" ry="2"></ellipse>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="158px" height="72px" viewBox="0 0 158 72" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>矩形备份</title>
+    <defs>
+        <path d="M155.105907,0 L275,0 C277.209139,-1.61026889e-14 279,1.790861 279,4 L279,64 C279,66.209139 277.209139,68 275,68 L129.093864,68 C126.884725,68 125.093864,66.209139 125.093864,64 C125.093864,63.4526547 125.206197,62.9111331 125.42391,62.4089501 L151.435953,2.40895012 C152.069999,0.946444157 153.511875,2.9573542e-15 155.105907,0 Z" id="path-1"></path>
+        <filter x="-1.5%" y="-5.1%" width="103.1%" height="110.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="-1" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.917647059   0 0 0 0 0.352941176   0 0 0 0 0.309803922  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="CC-copy前" transform="translate(-170.000000, -593.000000)">
+            <g id="矩形备份" transform="translate(48.000000, 595.000000)">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#EA5A4F" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

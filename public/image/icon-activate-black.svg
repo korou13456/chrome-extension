@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>商家icon</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="商家未登录时点击balance" transform="translate(-51.000000, -424.000000)" stroke="#333333" stroke-width="1.5">
+            <g id="编组" transform="translate(51.250000, 422.250000)">
+                <g id="商家icon" transform="translate(0.000000, 0.661325)">
+                    <rect id="矩形" x="0.75" y="2.08867517" width="14.5" height="14.5" rx="1.33333333"></rect>
+                    <path d="M10.2566257,2.71881607 L10.2566257,11.3667704 C10.2566257,11.745078 9.9766817,12.0517569 9.63135332,12.0517569 L5.83659695,12.0517569" id="路径" transform="translate(8.046611, 7.385286) rotate(-315.000000) translate(-8.046611, -7.385286) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
