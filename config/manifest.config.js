@@ -13,7 +13,7 @@ module.exports = (() => {
       16: "icon/icon-16.png",
     },
     externally_connectable: {
-      matches: [""],
+      matches: ["*://*.coupert.com/*", "*://*.coupert.me/*"],
     },
     background: {
       persistent: false,

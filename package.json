@@ -7,7 +7,7 @@
     "build": "(yarn install || npm install) && (yarn watch || npm run watch)",
     "dev": "webpack --config config/webpack.config.js --mode=none",
     "watch": "webpack --config config/webpack.config.js --mode=development --watch",
-    "prod": "EXTENSION_VERSION=${npm_package_version} && (rm -rf ./build || rd /s /q build) && webpack --config config/webpack.config.js --mode=production && cd ./build && zip -9roT ../Coupert-IOS-${npm_package_site}_${npm_package_version}.zip *",
+    "prod": "EXTENSION_VERSION=${npm_package_version} && (rm -rf ./build || rd /s /q build) && webpack --config config/webpack.config.js --mode=production && cd ./build",
     "prodnozip": "webpack --config config/webpack.config.js --mode=production",
     "autoProd": "EXTENSION_VERSION=${npm_package_version} && (rm -rf ./build || rd /s /q build) && webpack --config config/webpack.config.js --mode=production && cd ./build && zip -9roT ../Coupert-IOS.zip *"
   },
