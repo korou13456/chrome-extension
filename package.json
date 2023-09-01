@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension",
-  "version": "5.3.20",
+  "version": "0.0.1",
   "site": "SIE",
   "description": "browser extension",
   "scripts": {

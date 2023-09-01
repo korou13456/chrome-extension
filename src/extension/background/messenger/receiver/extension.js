@@ -1,5 +1,5 @@
 import Messenger from '../index';
-// import Extension from '../sender/extension';
+import Extension from '../sender/extension';
 import main from 'extension/background/main';
 
 Messenger.on('extension', async (message) => {
@@ -9,8 +9,11 @@ Messenger.on('extension', async (message) => {
             { action = '' } = { ...content };
         switch (action) {
             case 'cs:loaded':
-                // Extension.csrun(tabId);
-                main(tabId);
+                Extension.csrun(tabId);
+                break;
+
+            case 'start':
+                main();
                 break;
         }
     } catch (e) {

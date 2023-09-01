@@ -8,8 +8,17 @@ export function csloaded() {
     );
 }
 
+export function Start() {
+    return Messenger.send(
+        'extension',
+        { action: 'start' },
+        { to: 'bg', ignoreResponse: true }
+    );
+}
+
 csloaded();
 
 export default {
     csloaded,
+    Start,
 };
