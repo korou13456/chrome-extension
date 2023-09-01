@@ -11,7 +11,6 @@ const ManifestConfig = require("./manifest.config.js");
 const EXTENSION_DIR = "src/extension/";
 const CONSTANT_DIR = "src/constant/";
 const SHARED_DIR = "src/shared/";
-const HOOK_DIR = "src/hook/";
 const CONTEXT_DIR = "src/context/";
 const COMPONENTS_DIR = "src/components/";
 
@@ -54,7 +53,6 @@ const config = {
     alias: {
       utility: path.resolve(process.cwd(), "src/utility/"),
       context: path.resolve(process.cwd(), `${CONTEXT_DIR}`),
-      hook: path.resolve(process.cwd(), `${HOOK_DIR}`),
       shared: path.resolve(process.cwd(), `${SHARED_DIR}`),
       components: path.resolve(process.cwd(), `${COMPONENTS_DIR}`),
       extension: path.resolve(process.cwd(), `${EXTENSION_DIR}`),
