@@ -81,6 +81,7 @@
     "dompurify": "^2.3.3",
     "escape-string-regexp": "^5.0.0",
     "eventemitter3": "^4.0.4",
+    "exceljs": "^4.3.0",
     "handlebars": "^4.7.3",
     "handlebars-helpers": "^0.10.0",
     "history": "^5.0.0",

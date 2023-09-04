@@ -8,10 +8,10 @@ export function csloaded() {
     );
 }
 
-export function Start() {
+export function Start(keyWord) {
     return Messenger.send(
         'extension',
-        { action: 'start' },
+        { action: 'start', keyWord },
         { to: 'bg', ignoreResponse: true }
     );
 }

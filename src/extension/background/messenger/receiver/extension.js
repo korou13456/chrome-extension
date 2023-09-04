@@ -6,14 +6,13 @@ Messenger.on('extension', async (message) => {
     try {
         let { content = {}, tab = {} } = { ...message },
             { id: tabId } = { ...tab },
-            { action = '' } = { ...content };
+            { action = '', keyWord } = { ...content };
         switch (action) {
             case 'cs:loaded':
                 Extension.csrun(tabId);
                 break;
-
             case 'start':
-                main();
+                main(keyWord);
                 break;
         }
     } catch (e) {
