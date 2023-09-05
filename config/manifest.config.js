@@ -1,9 +1,9 @@
 module.exports = (() => {
     return {
-        name: '__MSG_app_name__',
+        name: 'Tiktok',
         version: '0.0.1',
         manifest_version: 2,
-        description: '__MSG_app_description__',
+        description: 'Tiktok',
         default_locale: 'en_US',
         icons: {
             128: 'icon/icon-128.png',
@@ -26,7 +26,7 @@ module.exports = (() => {
                 19: 'icon/icon-19.png',
                 16: 'icon/icon-16.png',
             },
-            default_title: '__MSG_app_name__',
+            default_title: 'Tiktok',
             default_popup: 'popover.html',
         },
         content_scripts: [
