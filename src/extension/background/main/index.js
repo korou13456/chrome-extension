@@ -30,6 +30,7 @@ export default async function main(keyWord) {
     }
     const thisNum = (await BrowserStorage.local.get('thisNum')) || 0;
     await BrowserStorage.local.del('thisNum');
+
     if (thisNum) {
         num = thisNum;
     }
@@ -42,12 +43,17 @@ export default async function main(keyWord) {
         return main();
     }
     let obj = await getDate(num, key_word);
+
+    const { fans = 0, amount = 0 } = { ...obj };
+
     if (!hasDuplicateName(Arr, obj)) {
-        Arr.push(obj);
+        if ((fans >= 10000 && amount >= 100000) || (fans == 0 && amount == 0)) {
+            Arr.push(obj);
+        }
     }
+    console.log(Arr, '_---LKL', num);
     num += 1;
     await delay(2000);
-    console.log(Arr, '!---><>>>>');
     if (Arr.length >= 100) {
         await Fun(Arr);
         Arr = [];
@@ -65,6 +71,7 @@ async function Fun(list = []) {
         'Time',
         'Recently_released',
         'Key_Word',
+        'Url',
     ]);
 
     list.forEach((item) => {
@@ -75,6 +82,7 @@ async function Fun(list = []) {
             item.time,
             item.is_it_up_to_date,
             item.keyWord,
+            item.url,
         ]);
     });
 
@@ -103,6 +111,7 @@ async function getDate(number, keyWord) {
 
     obj['fans'] = parseNumberWithKAndM(fansNum);
     obj['amount'] = amountArrFun(amountArr);
+    obj['url'] = 'https://www.tiktok.com/@' + name;
     const { response, tabs } = { ...(await clickGoVideo()) };
     const { time } = { ...response };
 
@@ -119,13 +128,14 @@ function TimeProcessing(time) {
         return true;
     }
     const DateRegex = /^\d{1,2}-\d{1,2}$/;
-    if (chineseCharactersRegex.test(DateRegex)) {
+    if (DateRegex.test(time)) {
         const givenDate = new Date(
-            `${new Date().getFullYear()}-${time}T00:00:00`
+            `${new Date().getFullYear()}-${time} T00:00:00`
         );
         const currentDate = new Date();
         const twoWeeksAgo = new Date(currentDate);
         twoWeeksAgo.setDate(currentDate.getDate() - 14);
+
         if (givenDate >= twoWeeksAgo && givenDate <= currentDate) {
             return true;
         } else {

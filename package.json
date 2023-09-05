@@ -1,7 +1,6 @@
 {
   "name": "chrome-extension",
   "version": "0.0.1",
-  "site": "SIE",
   "description": "browser extension",
   "scripts": {
     "build": "(yarn install || npm install) && (yarn watch || npm run watch)",

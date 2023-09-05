@@ -22,7 +22,7 @@ export async function get() {
         });
         return response;
     } catch (e) {
-        throw new Error(e.message);
+        return get();
     }
 }
 
@@ -35,7 +35,7 @@ export async function getName(num) {
         });
         return response;
     } catch (e) {
-        throw new Error(e.message);
+        return getName();
     }
 }
 
