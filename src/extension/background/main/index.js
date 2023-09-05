@@ -12,6 +12,11 @@ import {
     lazyFun,
 } from '../messenger/dataProcessing';
 
+import axios from 'axios';
+
+const webhookUrl =
+    'https://open.feishu.cn/open-apis/bot/v2/hook/49623249-6703-4ed3-a233-2b1c1e355575';
+
 let num = 0;
 
 let Arr = [];
@@ -44,18 +49,25 @@ export default async function main(keyWord) {
     }
     let obj = await getDate(num, key_word);
 
-    const { fans = 0, amount = 0 } = { ...obj };
+    const { fans = 0, amount = 0, is_it_up_to_date } = { ...obj };
 
-    if (!hasDuplicateName(Arr, obj)) {
+    if (!hasDuplicateName(Arr, obj) && is_it_up_to_date) {
         if ((fans >= 10000 && amount >= 100000) || (fans == 0 && amount == 0)) {
             Arr.push(obj);
         }
     }
-    console.log(Arr, '_---LKL', num);
     num += 1;
     await delay(2000);
     if (Arr.length >= 100) {
+        // 要发送的消息内容
+        const message = {
+            msg_type: 'text',
+            content: {
+                text: '已经成功获取100条数据',
+            },
+        };
         await Fun(Arr);
+        await axios.post(webhookUrl, message);
         Arr = [];
     }
     main();
@@ -69,7 +81,6 @@ async function Fun(list = []) {
         'Fans',
         'Amount_of_playback',
         'Time',
-        'Recently_released',
         'Key_Word',
         'Url',
     ]);
@@ -80,7 +91,6 @@ async function Fun(list = []) {
             item.fans,
             item.amount,
             item.time,
-            item.is_it_up_to_date,
             item.keyWord,
             item.url,
         ]);
@@ -128,14 +138,14 @@ function TimeProcessing(time) {
         return true;
     }
     const DateRegex = /^\d{1,2}-\d{1,2}$/;
+
     if (DateRegex.test(time)) {
         const givenDate = new Date(
-            `${new Date().getFullYear()}-${time} T00:00:00`
+            `${new Date().getFullYear()}-${time} 00:00:00`
         );
         const currentDate = new Date();
         const twoWeeksAgo = new Date(currentDate);
         twoWeeksAgo.setDate(currentDate.getDate() - 14);
-
         if (givenDate >= twoWeeksAgo && givenDate <= currentDate) {
             return true;
         } else {
