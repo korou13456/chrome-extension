@@ -4,13 +4,16 @@ import crmcollection from 'extension/background/crmcollection';
 
 Messenger.on('crm', async (message) => {
     const { content } = { ...message };
-
-    const { action, data } = { ...content };
-
+    const { action, data, name } = { ...content };
     switch (action) {
         case 'push':
-            console.log(data, '!--->>');
             crmcollection(data);
+            break;
+        case 'canDetect':
+            crmcollection([], 'canDetect');
+            break;
+        case 'skip':
+            crmcollection([], 'skip', name);
             break;
     }
 });
@@ -28,15 +31,28 @@ async function getTabs() {
     return tabs;
 }
 
-async function goMainPage() {
+export async function goMainPage(name) {
     const tabs = await getTabs();
     try {
         const response = await browser.tabs.sendMessage(tabs[0].id, {
             action: 'crmcollection:goMainPage',
+            name,
         });
-        return response;
+        return { response, tabs };
     } catch (e) {
-        return goMainPage();
+        return goMainPage(name);
+    }
+}
+
+export async function getData() {
+    const tabs = await getTabs();
+    try {
+        const response = await browser.tabs.sendMessage(tabs[0].id, {
+            action: 'crmcollection:getData',
+        });
+        return { response, tabs };
+    } catch (e) {
+        return getData();
     }
 }
 

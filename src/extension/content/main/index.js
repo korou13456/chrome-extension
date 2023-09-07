@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { Start } from 'extension/content/messenger/sender/extension';
+import Messenger from '../messenger';
 
 export default function main() {
     const url = window.location.toString();
@@ -16,5 +17,25 @@ export default function main() {
             }
             Start(keyWord);
         }
+
+        const regexp =
+            /https:\/\/creatormarketplace\.tiktok\.com\/ad\/author\/\d+/;
+        if (new RegExp(regexp).test(url)) {
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 3000);
+
+            setTimeout(() => {
+                canDetect();
+            }, 5000);
+        }
     });
+}
+
+async function canDetect() {
+    Messenger.send(
+        'crm',
+        { action: 'canDetect' },
+        { to: 'bg', ignoreResponse: true }
+    );
 }
