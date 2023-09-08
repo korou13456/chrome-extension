@@ -7,8 +7,12 @@ import axios from 'axios';
 let Arr = [];
 let NoArr = [];
 let num = 0;
+let thisData = {};
 
 let dataArr = [];
+
+const webhookUrl =
+    'https://open.feishu.cn/open-apis/bot/v2/hook/49623249-6703-4ed3-a233-2b1c1e355575';
 
 const headers = {
     authKey: 'f4d01d0db3a57484bbc37daf58c96fe0',
@@ -16,13 +20,14 @@ const headers = {
     sessionId: 'lo06p3ctg949ij69me7j9st1b7',
 };
 
-export default async function crmcollection(data, active, name) {
+export default async function crmcollection(data, active) {
     switch (active) {
+        case 'UploadCrm':
+            console.log(data, '开始crm上传');
+            break;
         case 'skip':
-            console.log(name, '!--->>>');
-            if (NoArr.indexOf(name) === -1) NoArr.push(name);
-            console.log(NoArr, '!--->>>');
-
+            if (!hasDuplicateName(Arr, thisData)) NoArr.push(thisData);
+            Fun2(NoArr);
             num++;
             crmcollection(dataArr);
             break;
@@ -38,15 +43,18 @@ export default async function crmcollection(data, active, name) {
                     ValueRate,
                     countryRate,
                 } = { ...data };
-                const [, , fans, Amount_of_playback, , , url] = [
+                const [, , fans, Amount_of_playback, , Key_Word, url] = [
                     ...dataArr[num],
                 ];
                 const defaultCountryRate = countryRate;
                 let countryString = '';
-                for (let i = 0; i < defaultCountryRate.length; i++) {
-                    const { title, value } = { ...defaultCountryRate[i] };
-                    countryString += `${title}:${value};`;
+                if (!isEmpty(defaultCountryRate)) {
+                    for (let i = 0; i < defaultCountryRate.length; i++) {
+                        const { title, value } = { ...defaultCountryRate[i] };
+                        countryString += `${title}:${value};`;
+                    }
                 }
+
                 const obj = {
                     name, // 客户名称
                     industry: '服装配饰', // 客户行业
@@ -65,6 +73,7 @@ export default async function crmcollection(data, active, name) {
                     AppleRate: 0, // 设备apple占比
                     email: 'xxx@xx.xxx',
                     url, // 红人主页
+                    Key_Word,
                 };
                 axios
                     .post(
@@ -107,11 +116,15 @@ export default async function crmcollection(data, active, name) {
                     Fun(Arr);
                     return;
                 }
-                console.log(active, data.length, num, '!____');
                 if (data.length <= num) {
+                    const message = {
+                        msg_type: 'text',
+                        content: {
+                            text: '红人搜索完毕',
+                        },
+                    };
+                    await axios.post(webhookUrl, message);
                     Fun(Arr);
-
-                    console.log(NoArr, '!--------========');
                     return;
                 }
                 let url =
@@ -120,6 +133,7 @@ export default async function crmcollection(data, active, name) {
                 dataArr = data;
                 if (data.length < num) return;
                 console.log(data[num], Arr, num, '!-->M<>>>');
+                thisData = data[num];
                 const [, name] = [...data[num]];
                 browser.tabs.create({ url: url + name });
                 const { tabs } = await goMainPage(name);
@@ -180,6 +194,7 @@ async function Fun(list = []) {
             AppleRate,
             email,
             url,
+            Key_Word = null,
         } = {
             ...item,
         };
@@ -196,7 +211,7 @@ async function Fun(list = []) {
             nn = ProportionOf;
         }
         worksheet.addRow([
-            name + '1',
+            name,
             industry,
             inCharge,
             types,
@@ -213,6 +228,7 @@ async function Fun(list = []) {
             AppleRate,
             email,
             url,
+            Key_Word,
         ]);
     });
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -223,6 +239,52 @@ async function Fun(list = []) {
         const link = document.createElement('a');
         link.href = url;
         link.download = 'uploadFile.xlsx';
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
+function hasDuplicateName(arr, obj) {
+    const names = arr.map((item) => item.name);
+
+    if (names.includes(obj.name)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+async function Fun2(list = []) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet1');
+    worksheet.addRow([
+        'Name',
+        'Fans',
+        'Amount_of_playback',
+        'Time',
+        'Key_Word',
+        'Url',
+    ]);
+
+    list.forEach((item) => {
+        worksheet.addRow([
+            item.name,
+            item.fans,
+            item.amount,
+            item.time,
+            item.keyWord,
+            item.url,
+        ]);
+    });
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'switchTemplate.xlsx';
         link.click();
         URL.revokeObjectURL(url);
     });

@@ -10,6 +10,7 @@ export default function main() {
 
         const Startreggexp =
             /https:\/\/www\.tiktok\.com\/search\/video\?q=.*&t=\d+/;
+
         if (new RegExp(Startreggexp).test(url)) {
             const keyWord = $('[data-e2e="search-user-input"]').val();
             if (!keyWord) {

@@ -12,6 +12,7 @@ Messenger.on('extension', async (message) => {
                 Extension.csrun(tabId);
                 break;
             case 'start':
+                console.log('!@#lll开始');
                 main(keyWord);
                 break;
         }

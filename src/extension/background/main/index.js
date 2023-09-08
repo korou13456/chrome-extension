@@ -33,6 +33,7 @@ export default async function main(keyWord) {
         }
         return;
     }
+
     const thisNum = (await BrowserStorage.local.get('thisNum')) || 0;
     await BrowserStorage.local.del('thisNum');
 
@@ -42,6 +43,18 @@ export default async function main(keyWord) {
 
     const { num: Total = 0 } = { ...(await get()) };
     if (!Total) return main();
+
+    if (Total != 0 && num != 0 && Total == num) {
+        // 要发送的消息内容
+        const message = {
+            msg_type: 'text',
+            content: {
+                text: '数据到底',
+            },
+        };
+        await axios.post(webhookUrl, message);
+    }
+
     if (Total - num <= 5) {
         lazyFun();
         await delay(1000);
@@ -56,6 +69,7 @@ export default async function main(keyWord) {
             Arr.push(obj);
         }
     }
+    console.log(Arr, num, '!--->><>>>>>');
     num += 1;
     await delay(2000);
     if (Arr.length >= 100) {

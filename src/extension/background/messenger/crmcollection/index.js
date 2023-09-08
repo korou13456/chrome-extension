@@ -9,6 +9,8 @@ Messenger.on('crm', async (message) => {
         case 'push':
             crmcollection(data);
             break;
+        case 'UploadCrm':
+            break;
         case 'canDetect':
             crmcollection([], 'canDetect');
             break;
