@@ -27,7 +27,6 @@ export default async function crmcollection(data, active) {
             break;
         case 'skip':
             NoArr.push(thisData);
-            Fun2(NoArr);
             num++;
             crmcollection(dataArr);
             break;
@@ -54,8 +53,7 @@ export default async function crmcollection(data, active) {
                     for (let i = 0; i < defaultCountryRate.length; i++) {
                         const { title, value } = { ...defaultCountryRate[i] };
                         if (title == '美国' || title == '英国') {
-                            value.replace('%', '');
-                            if (value >= 50) ifCountry = true;
+                            if (value.replace('%', '') >= 50) ifCountry = true;
                         }
                         countryString += `${title}:${value};`;
                     }
@@ -63,14 +61,15 @@ export default async function crmcollection(data, active) {
 
                 console.log(tcmUrl, '!-->>');
 
-                if (ifCountry) {
+                if (!ifCountry) {
                     setTimeout(() => {
                         num++;
                         crmcollection(dataArr);
                         setTimeout(() => {
                             browser.tabs.remove(tabs[0].id);
-                        }, 10000);
-                    }, 2000);
+                        }, 2000);
+                    }, 5000);
+                    return;
                 }
 
                 const obj = {
@@ -142,7 +141,9 @@ export default async function crmcollection(data, active) {
                         },
                     };
                     await axios.post(webhookUrl, message);
-                    if (Arr) Fun(Arr);
+                    if (!isEmpty(Arr)) Fun(Arr);
+                    console.log(NoArr, '!--->>>>11===');
+                    if (!isEmpty(NoArr)) Fun2(NoArr);
                     return;
                 }
                 let url =
@@ -292,7 +293,7 @@ async function Fun2(list = []) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'switchTemplate.xlsx';
+        link.download = 'nois.xlsx';
         link.click();
         URL.revokeObjectURL(url);
     });
