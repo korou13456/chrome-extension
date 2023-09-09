@@ -151,7 +151,7 @@ export default async function crmcollection(data, active) {
                 if (isEmpty(data)) return;
                 dataArr = data;
                 if (data.length < num) return;
-                console.log(data[num], Arr, num, '!-->M<>>>');
+                console.log(data[num], Arr, NoArr, num, '!-->M<>>>');
                 thisData = data[num];
                 const [, name] = [...data[num]];
                 browser.tabs.create({ url: url + name });
@@ -277,12 +277,12 @@ async function Fun2(list = []) {
 
     list.forEach((item) => {
         worksheet.addRow([
-            item.name,
-            item.fans,
-            item.amount,
-            item.time,
-            item.keyWord,
-            item.url,
+            item[1],
+            item[2],
+            item[3],
+            item[4],
+            item[5],
+            item[6],
         ]);
     });
 
