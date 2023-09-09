@@ -14,7 +14,7 @@ export default function main() {
         if (new RegExp(Startreggexp).test(url)) {
             const keyWord = $('[data-e2e="search-user-input"]').val();
             if (!keyWord) {
-                return main();
+                return;
             }
             Start(keyWord);
         }

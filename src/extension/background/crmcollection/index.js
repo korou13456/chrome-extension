@@ -26,7 +26,7 @@ export default async function crmcollection(data, active) {
             console.log(data, '开始crm上传');
             break;
         case 'skip':
-            if (!hasDuplicateName(Arr, thisData)) NoArr.push(thisData);
+            NoArr.push(thisData);
             Fun2(NoArr);
             num++;
             crmcollection(dataArr);
@@ -42,17 +42,35 @@ export default async function crmcollection(data, active) {
                     title,
                     ValueRate,
                     countryRate,
+                    url: tcmUrl,
                 } = { ...data };
-                const [, , fans, Amount_of_playback, , Key_Word, url] = [
+                const [, , fans, Amount_of_playback, , Key_Word, url, email] = [
                     ...dataArr[num],
                 ];
                 const defaultCountryRate = countryRate;
                 let countryString = '';
+                let ifCountry = false;
                 if (!isEmpty(defaultCountryRate)) {
                     for (let i = 0; i < defaultCountryRate.length; i++) {
                         const { title, value } = { ...defaultCountryRate[i] };
+                        if (title == '美国' || title == '英国') {
+                            value.replace('%', '');
+                            if (value >= 50) ifCountry = true;
+                        }
                         countryString += `${title}:${value};`;
                     }
+                }
+
+                console.log(tcmUrl, '!-->>');
+
+                if (ifCountry) {
+                    setTimeout(() => {
+                        num++;
+                        crmcollection(dataArr);
+                        setTimeout(() => {
+                            browser.tabs.remove(tabs[0].id);
+                        }, 10000);
+                    }, 2000);
                 }
 
                 const obj = {
@@ -61,7 +79,7 @@ export default async function crmcollection(data, active) {
                     inCharge: 'initialization', // 负责人
                     types: '红人', // 客户类型
                     progress: '待沟通', // 合作进度
-                    LinkedIn_Acct: '', // LinkedIn_Acct
+                    LinkedIn_Acct: tcmUrl, // LinkedIn_Acct
                     fans, // 全平台粉丝
                     Amount_of_playback, // 平均播放量
                     interactionRate, // 互动率
@@ -71,7 +89,7 @@ export default async function crmcollection(data, active) {
                     distribution: `${title}:${ValueRate}`, // 年龄分布
                     Country: countryString, // 国家受众占比
                     AppleRate: 0, // 设备apple占比
-                    email: 'xxx@xx.xxx',
+                    email,
                     url, // 红人主页
                     Key_Word,
                 };
@@ -124,7 +142,7 @@ export default async function crmcollection(data, active) {
                         },
                     };
                     await axios.post(webhookUrl, message);
-                    Fun(Arr);
+                    if (Arr) Fun(Arr);
                     return;
                 }
                 let url =
@@ -242,16 +260,6 @@ async function Fun(list = []) {
         link.click();
         URL.revokeObjectURL(url);
     });
-}
-
-function hasDuplicateName(arr, obj) {
-    const names = arr.map((item) => item.name);
-
-    if (names.includes(obj.name)) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 async function Fun2(list = []) {

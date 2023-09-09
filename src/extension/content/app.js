@@ -5,3 +5,5 @@ import './messenger/sender/extension';
 import './messenger/dataProcessing';
 
 import './messenger/crmcollection';
+
+import './messenger/redskins';

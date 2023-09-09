@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import browser from 'webextension-polyfill';
 
+console.log(12312312, '1....');
 browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     const { action, num } = { ...request };
     switch (action) {
@@ -17,6 +18,7 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
         case 'dataProcessing:getName':
             (() => {
+                console.log('dataProcessing:getName', '====');
                 const response = {
                     name: getName(num),
                 };
@@ -28,6 +30,7 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
             (() => {
                 const fansNum = $('[data-e2e="followers-count"]').text();
                 const amount = $('[data-e2e="video-views"]');
+                const emailText = $('[data-e2e="user-bio"]').text();
                 let amountArr = [];
                 for (let i = 0; i < amount.length; i++) {
                     if (!amount[i]) continue;
@@ -37,6 +40,7 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
                 const response = {
                     fansNum,
                     amountArr,
+                    emailText,
                 };
                 sendResponse(response);
             })();

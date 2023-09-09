@@ -1,91 +1,218 @@
 import browser from 'webextension-polyfill';
+import delay from 'delay';
 import BrowserStorage from 'shared/browser-storage';
 
 import ExcelJS from 'exceljs';
-import delay from 'delay';
-import { isEmpty } from 'lodash';
-import {
-    get,
-    getName,
-    getDetails,
-    clickGoVideo,
-    lazyFun,
-} from '../messenger/dataProcessing';
+// import delay from 'delay';
+// import { isEmpty } from 'lodash';
+// import {
+//     get,
+//     getName,
+//     getDetails,
+//     clickGoVideo,
+//     lazyFun,
+// } from '../messenger/dataProcessing';
 
 import axios from 'axios';
 
-const webhookUrl =
-    'https://open.feishu.cn/open-apis/bot/v2/hook/49623249-6703-4ed3-a233-2b1c1e355575';
+import { getDetails, clickGoVideo, lazyFun } from '../messenger/dataProcessing';
+
+import { enterFun } from '../messenger/redskins';
+
+import redskins from 'extension/background/redskins';
+
+let NameArr = [];
 
 let num = 0;
 
 let Arr = [];
+// 去重使用
+let StorageName = [];
 
 let key_word = '';
 
-export default async function main(keyWord) {
-    if (keyWord) key_word = keyWord;
-    if (!window.ifgo) {
-        if (!isEmpty(Arr)) {
-            Fun(Arr);
-            Arr = [];
-            await BrowserStorage.local.set('thisNum', num);
-        }
+const webhookUrl =
+    'https://open.feishu.cn/open-apis/bot/v2/hook/49623249-6703-4ed3-a233-2b1c1e355575';
+
+export default async function main(source, action, data) {
+    if (window.ifgo == 123) {
+        Fun(Arr);
         return;
     }
+    switch (action) {
+        case 'end':
+            (async () => {
+                Fun(Arr);
+                const message = {
+                    msg_type: 'text',
+                    content: {
+                        text: '脚本运行完毕',
+                    },
+                };
+                await axios.post(webhookUrl, message);
+            })();
+            break;
+        case 'retry':
+            // 已经重新加载
+            console.log('重新加载页面');
+            break;
+        case 'detection':
+            NameArr = data;
+            main('', 'getData', '');
+            break;
+        case 'getData':
+            (async () => {
+                const obj = await getDate(num, NameArr[num]);
+                const {
+                    fans = 0,
+                    amount = 0,
+                    is_it_up_to_date,
+                    name,
+                } = { ...obj };
 
-    const thisNum = (await BrowserStorage.local.get('thisNum')) || 0;
-    await BrowserStorage.local.del('thisNum');
+                console.log(
+                    is_it_up_to_date,
+                    fans >= 10000,
+                    amount >= 100000,
+                    '--->>>>===='
+                );
+                if (is_it_up_to_date) {
+                    if (
+                        (fans >= 10000 && amount >= 100000) ||
+                        (fans == 0 && amount == 0)
+                    ) {
+                        // 判断当前名字是否重复
 
-    if (thisNum) {
-        num = thisNum;
+                        if (hasDuplicateName(name)) {
+                            StorageName.push(name);
+                            Arr.push(obj);
+                        }
+                    }
+                }
+                if (Arr.length >= 100) {
+                    await Fun(Arr);
+                    Arr = [];
+                }
+                console.log(obj, Arr, num, '---===>>>');
+                num++;
+                if (num == NameArr.length) {
+                    console.log('换词--------->>><>>>>>>>>');
+                    await BrowserStorage.local.set('storageName', StorageName);
+                    num = 0;
+                    NameArr = [];
+                    StorageName = [];
+                    //  要发送的消息内容
+                    const message = {
+                        msg_type: 'text',
+                        content: {
+                            text:
+                                key_word +
+                                '已经结束，即将换词，共有' +
+                                num +
+                                '条数据',
+                        },
+                    };
+                    await axios.post(webhookUrl, message);
+                    redskins([]);
+                    return;
+                }
+
+                if (num >= NameArr.length - 5) {
+                    await delay(2000);
+                    lazyFun();
+                    await delay(2000);
+                    await enterFun();
+                } else {
+                    main('', 'getData', '');
+                }
+            })();
+            break;
+        default:
+            // 输入搜索词
+            console.log(source, '!---><>>>');
+            browser.tabs.create({
+                url:
+                    'https://www.tiktok.com/search/video?q=' +
+                    encodeURIComponent(source),
+            });
+            key_word = source;
+            StorageName = (await BrowserStorage.local.get('storageName')) || [];
+
+            // 开始检测是否进入页面
+            await enterFun();
+            break;
     }
-
-    const { num: Total = 0 } = { ...(await get()) };
-    if (!Total) return main();
-
-    if (Total != 0 && num != 0 && Total == num) {
-        // 要发送的消息内容
-        const message = {
-            msg_type: 'text',
-            content: {
-                text: '数据到底',
-            },
-        };
-        await axios.post(webhookUrl, message);
-    }
-
-    if (Total - num <= 5) {
-        lazyFun();
-        await delay(1000);
-        return main();
-    }
-    let obj = await getDate(num, key_word);
-
-    const { fans = 0, amount = 0, is_it_up_to_date } = { ...obj };
-
-    if (!hasDuplicateName(Arr, obj) && is_it_up_to_date) {
-        if ((fans >= 10000 && amount >= 100000) || (fans == 0 && amount == 0)) {
-            Arr.push(obj);
-        }
-    }
-    console.log(Arr, num, '!--->><>>>>>');
-    num += 1;
-    await delay(2000);
-    if (Arr.length >= 100) {
-        // 要发送的消息内容
-        const message = {
-            msg_type: 'text',
-            content: {
-                text: '已经成功获取100条数据',
-            },
-        };
-        await Fun(Arr);
-        await axios.post(webhookUrl, message);
-        Arr = [];
-    }
-    main();
 }
+
+// let num = 0;
+
+// let Arr = [];
+
+// let key_word = '';
+
+// export default async function main(keyWord) {
+//     if (keyWord) key_word = keyWord;
+//     if (!window.ifgo) {
+//         if (!isEmpty(Arr)) {
+//             Fun(Arr);
+//             Arr = [];
+//             await BrowserStorage.local.set('thisNum', num);
+//         }
+//         return;
+//     }
+
+//     const thisNum = (await BrowserStorage.local.get('thisNum')) || 0;
+//     await BrowserStorage.local.del('thisNum');
+
+//     if (thisNum) {
+//         num = thisNum;
+//     }
+
+//     const { num: Total = 0 } = { ...(await get()) };
+//     if (!Total) return main();
+
+//     if (Total != 0 && num != 0 && Total == num) {
+//         // 要发送的消息内容
+//         const message = {
+//             msg_type: 'text',
+//             content: {
+//                 text: '数据到底',
+//             },
+//         };
+//         await axios.post(webhookUrl, message);
+//     }
+
+//     if (Total - num <= 5) {
+//         lazyFun();
+//         await delay(1000);
+//         return main();
+//     }
+//     let obj = await getDate(num, key_word);
+
+//     const { fans = 0, amount = 0, is_it_up_to_date } = { ...obj };
+
+//     if (!hasDuplicateName(Arr, obj) && is_it_up_to_date) {
+//         if ((fans >= 10000 && amount >= 100000) || (fans == 0 && amount == 0)) {
+//             Arr.push(obj);
+//         }
+//     }
+//     console.log(Arr, num, '!--->><>>>>>');
+//     num += 1;
+//     await delay(2000);
+//     if (Arr.length >= 100) {
+//         // 要发送的消息内容
+//         const message = {
+//             msg_type: 'text',
+//             content: {
+//                 text: '已经成功获取100条数据',
+//             },
+//         };
+//         await Fun(Arr);
+//         await axios.post(webhookUrl, message);
+//         Arr = [];
+//     }
+//     main();
+// }
 
 async function Fun(list = []) {
     const workbook = new ExcelJS.Workbook();
@@ -97,6 +224,7 @@ async function Fun(list = []) {
         'Time',
         'Key_Word',
         'Url',
+        'Email',
     ]);
 
     list.forEach((item) => {
@@ -107,6 +235,7 @@ async function Fun(list = []) {
             item.time,
             item.keyWord,
             item.url,
+            item.email,
         ]);
     });
 
@@ -123,19 +252,19 @@ async function Fun(list = []) {
     });
 }
 
-async function getDate(number, keyWord) {
+async function getDate(number, name) {
     let obj = {};
-    obj['keyWord'] = keyWord;
-    const { name = '' } = await getName(number);
     obj['name'] = name;
+    obj['keyWord'] = key_word;
     browser.tabs.create({ url: 'https://www.tiktok.com/@' + name });
-    const { fansNum, amountArr } = {
+    const { fansNum, amountArr, emailText } = {
         ...(await getDetails(number)),
     };
 
     obj['fans'] = parseNumberWithKAndM(fansNum);
     obj['amount'] = amountArrFun(amountArr);
     obj['url'] = 'https://www.tiktok.com/@' + name;
+    obj['email'] = extractEmail(emailText);
     const { response, tabs } = { ...(await clickGoVideo()) };
     const { time } = { ...response };
 
@@ -150,21 +279,6 @@ function TimeProcessing(time) {
     const chineseCharactersRegex = /[\u4e00-\u9fa5]/;
     if (chineseCharactersRegex.test(time)) {
         return true;
-    }
-    const DateRegex = /^\d{1,2}-\d{1,2}$/;
-
-    if (DateRegex.test(time)) {
-        const givenDate = new Date(
-            `${new Date().getFullYear()}-${time} 00:00:00`
-        );
-        const currentDate = new Date();
-        const twoWeeksAgo = new Date(currentDate);
-        twoWeeksAgo.setDate(currentDate.getDate() - 14);
-        if (givenDate >= twoWeeksAgo && givenDate <= currentDate) {
-            return true;
-        } else {
-            return false;
-        }
     }
     return false;
 }
@@ -194,12 +308,26 @@ function parseNumberWithKAndM(input) {
     }
 }
 
-function hasDuplicateName(arr, obj) {
-    const names = arr.map((item) => item.name);
-
-    if (names.includes(obj.name)) {
-        return true;
-    } else {
+function hasDuplicateName(name) {
+    try {
+        if (StorageName.indexOf(name) == -1) return true;
         return false;
+    } catch (error) {
+        return true;
+    }
+}
+
+function extractEmail(text) {
+    // 使用正则表达式匹配邮箱地址的模式
+    const emailRegex = /[\w\\.-]+@[\w\\.-]+\.\w+/;
+
+    // 使用正则表达式的exec方法来查找匹配的邮箱地址
+    const match = text.match(emailRegex);
+
+    // 如果找到匹配的邮箱地址，返回它，否则返回null
+    if (match) {
+        return match[0];
+    } else {
+        return null;
     }
 }

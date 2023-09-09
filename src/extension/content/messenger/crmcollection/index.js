@@ -7,7 +7,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const { action, name } = { ...request };
     switch (action) {
         case 'crmcollection:goMainPage':
-            console.log(name, '!------>>>');
             (async () => {
                 let num = 0;
                 let time = setInterval(async () => {
@@ -140,6 +139,8 @@ function getData() {
     const title = document.querySelector('.profile-title').innerText;
     const ValueRate = document.querySelectorAll('.profile-val')[2].innerText;
 
+    const url = window.location.toString();
+
     return {
         name,
         signature,
@@ -150,5 +151,6 @@ function getData() {
         countryRate,
         title,
         ValueRate,
+        url,
     };
 }
