@@ -3,15 +3,6 @@ import delay from 'delay';
 import BrowserStorage from 'shared/browser-storage';
 
 import ExcelJS from 'exceljs';
-// import delay from 'delay';
-// import { isEmpty } from 'lodash';
-// import {
-//     get,
-//     getName,
-//     getDetails,
-//     clickGoVideo,
-//     lazyFun,
-// } from '../messenger/dataProcessing';
 
 import axios from 'axios';
 
@@ -98,7 +89,6 @@ export default async function main(source, action, data) {
                 if (num == NameArr.length) {
                     console.log('换词--------->>><>>>>>>>>');
                     await BrowserStorage.local.set('storageName', StorageName);
-                    num = 0;
                     NameArr = [];
                     StorageName = [];
                     //  要发送的消息内容
@@ -113,6 +103,7 @@ export default async function main(source, action, data) {
                         },
                     };
                     await axios.post(webhookUrl, message);
+                    num = 0;
                     redskins([]);
                     return;
                 }
@@ -143,76 +134,6 @@ export default async function main(source, action, data) {
             break;
     }
 }
-
-// let num = 0;
-
-// let Arr = [];
-
-// let key_word = '';
-
-// export default async function main(keyWord) {
-//     if (keyWord) key_word = keyWord;
-//     if (!window.ifgo) {
-//         if (!isEmpty(Arr)) {
-//             Fun(Arr);
-//             Arr = [];
-//             await BrowserStorage.local.set('thisNum', num);
-//         }
-//         return;
-//     }
-
-//     const thisNum = (await BrowserStorage.local.get('thisNum')) || 0;
-//     await BrowserStorage.local.del('thisNum');
-
-//     if (thisNum) {
-//         num = thisNum;
-//     }
-
-//     const { num: Total = 0 } = { ...(await get()) };
-//     if (!Total) return main();
-
-//     if (Total != 0 && num != 0 && Total == num) {
-//         // 要发送的消息内容
-//         const message = {
-//             msg_type: 'text',
-//             content: {
-//                 text: '数据到底',
-//             },
-//         };
-//         await axios.post(webhookUrl, message);
-//     }
-
-//     if (Total - num <= 5) {
-//         lazyFun();
-//         await delay(1000);
-//         return main();
-//     }
-//     let obj = await getDate(num, key_word);
-
-//     const { fans = 0, amount = 0, is_it_up_to_date } = { ...obj };
-
-//     if (!hasDuplicateName(Arr, obj) && is_it_up_to_date) {
-//         if ((fans >= 10000 && amount >= 100000) || (fans == 0 && amount == 0)) {
-//             Arr.push(obj);
-//         }
-//     }
-//     console.log(Arr, num, '!--->><>>>>>');
-//     num += 1;
-//     await delay(2000);
-//     if (Arr.length >= 100) {
-//         // 要发送的消息内容
-//         const message = {
-//             msg_type: 'text',
-//             content: {
-//                 text: '已经成功获取100条数据',
-//             },
-//         };
-//         await Fun(Arr);
-//         await axios.post(webhookUrl, message);
-//         Arr = [];
-//     }
-//     main();
-// }
 
 async function Fun(list = []) {
     const workbook = new ExcelJS.Workbook();
@@ -250,6 +171,13 @@ async function Fun(list = []) {
         link.click();
         URL.revokeObjectURL(url);
     });
+    const message = {
+        msg_type: 'text',
+        content: {
+            text: '完成爬取100条，注意查看',
+        },
+    };
+    await axios.post(webhookUrl, message);
 }
 
 async function getDate(number, name) {
