@@ -130,7 +130,8 @@ export default async function crmcollection(data, active) {
         default:
             (async () => {
                 if (window.ifShou) {
-                    Fun(Arr);
+                    if (!isEmpty(Arr)) Fun(Arr);
+                    if (!isEmpty(NoArr)) Fun2(NoArr);
                     return;
                 }
                 if (data.length <= num) {
