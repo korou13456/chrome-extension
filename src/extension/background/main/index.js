@@ -1,16 +1,22 @@
 import browser from 'webextension-polyfill';
 import delay from 'delay';
-import BrowserStorage from 'shared/browser-storage';
 
 import ExcelJS from 'exceljs';
 
 import axios from 'axios';
 
-import { getDetails, clickGoVideo, lazyFun } from '../messenger/dataProcessing';
+import {
+    getDetails,
+    clickGoVideo,
+    lazyFun,
+    getTabs,
+} from '../messenger/dataProcessing';
 
 import { enterFun } from '../messenger/redskins';
 
 import redskins from 'extension/background/redskins';
+
+import { postFormData } from 'extension/utils/axios';
 
 let NameArr = [];
 
@@ -18,7 +24,6 @@ let num = 0;
 
 let Arr = [];
 // 去重使用
-let StorageName = [];
 
 let key_word = '';
 
@@ -67,16 +72,36 @@ export default async function main(source, action, data) {
                     amount >= 100000,
                     '--->>>>===='
                 );
+
                 if (is_it_up_to_date) {
                     if (
                         (fans >= 10000 && amount >= 100000) ||
                         (fans == 0 && amount == 0)
                     ) {
                         // 判断当前名字是否重复
-
-                        if (hasDuplicateName(name)) {
-                            StorageName.push(name);
-                            Arr.push(obj);
+                        const { data } = {
+                            ...(await postFormData('/tt_name_search', {
+                                name,
+                            })),
+                        };
+                        if (!data) {
+                            const { code } = await postFormData(
+                                '/tt_name_push',
+                                {
+                                    name,
+                                }
+                            );
+                            if (code == 0) {
+                                Arr.push(obj);
+                            } else {
+                                const message = {
+                                    msg_type: 'text',
+                                    content: {
+                                        text: '输入库插入名字失败' + name,
+                                    },
+                                };
+                                await axios.post(webhookUrl, message);
+                            }
                         }
                     }
                 }
@@ -87,10 +112,7 @@ export default async function main(source, action, data) {
                 console.log(obj, Arr, num, '---===>>>');
                 num++;
                 if (num == NameArr.length) {
-                    console.log('换词--------->>><>>>>>>>>');
-                    await BrowserStorage.local.set('storageName', StorageName);
                     NameArr = [];
-                    StorageName = [];
                     //  要发送的消息内容
                     const message = {
                         msg_type: 'text',
@@ -103,6 +125,8 @@ export default async function main(source, action, data) {
                         },
                     };
                     await axios.post(webhookUrl, message);
+                    const tabs = await getTabs();
+                    browser.tabs.remove(tabs[0].id);
                     num = 0;
                     redskins([]);
                     return;
@@ -120,15 +144,12 @@ export default async function main(source, action, data) {
             break;
         default:
             // 输入搜索词
-            console.log(source, '!---><>>>');
             browser.tabs.create({
                 url:
                     'https://www.tiktok.com/search/video?q=' +
                     encodeURIComponent(source),
             });
             key_word = source;
-            StorageName = (await BrowserStorage.local.get('storageName')) || [];
-
             // 开始检测是否进入页面
             await enterFun();
             break;
@@ -233,15 +254,6 @@ function parseNumberWithKAndM(input) {
         return numericPart * 1000000;
     } else {
         return numericPart;
-    }
-}
-
-function hasDuplicateName(name) {
-    try {
-        if (StorageName.indexOf(name) == -1) return true;
-        return false;
-    } catch (error) {
-        return true;
     }
 }
 

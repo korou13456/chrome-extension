@@ -5,7 +5,9 @@ import {
     push,
     UploadCrm,
     GetRedskinsInfo,
-} from 'extension/popover/messenger/crmcollection.js';
+} from 'extension/popover/messenger/crmcollection';
+
+import { postUpload } from 'extension/utils/axios';
 
 export default function File() {
     const handleFileUpload = (e) => {
@@ -77,6 +79,13 @@ export default function File() {
         }
     };
 
+    const handleUploadEmail = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            postUpload('/tt_email_push', file);
+        }
+    };
+
     return (
         <div>
             <h4>XLSX文件上传和解析示例</h4>
@@ -88,6 +97,14 @@ export default function File() {
             <div style={{ borderTop: '1px solid #ccc' }}>
                 <h4>上传检测词：</h4>
                 <input type="file" accept=".xlsx" onChange={handleFileword} />
+            </div>
+            <div style={{ borderTop: '1px solid #ccc' }}>
+                <h4>上传邮箱：</h4>
+                <input
+                    type="file"
+                    accept=".xlsx"
+                    onChange={handleUploadEmail}
+                />
             </div>
         </div>
     );

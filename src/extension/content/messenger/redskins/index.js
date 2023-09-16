@@ -5,19 +5,18 @@ import browser from 'webextension-polyfill';
 
 let ifsend;
 browser.runtime.onMessage.addListener((request) => {
-    // _sender, sendResponse
     const { action } = { ...request };
     switch (action) {
         case 'redskins:enter':
-            console.log('!===--->', '1--->>>');
             (async function () {
                 ifsend = true;
-                const domes = $('[data-e2e="search-card-user-unique-id"]');
-                if (domes[0]) {
-                    startDetectionFun(domes);
-                    return;
-                }
-                window.addEventListener('load', function () {
+                let timer = setInterval(() => {
+                    const domes = $('[data-e2e="search-card-user-unique-id"]');
+                    if (domes[0]) {
+                        startDetectionFun(domes);
+                        clearInterval(timer);
+                        return;
+                    }
                     const button = $('[type="button"]')[0];
                     if (button) {
                         const clickEvent = new MouseEvent('click', {
@@ -28,48 +27,8 @@ browser.runtime.onMessage.addListener((request) => {
                         if (button) {
                             button.dispatchEvent(clickEvent);
                         }
-                        const observer = new MutationObserver(function (
-                            mutationsList
-                        ) {
-                            mutationsList.forEach(function (mutation) {
-                                if (mutation.type === 'attributes') {
-                                    // 元素属性发生变化
-                                    const button = $('[type="button"]')[0];
-                                    if (!button) {
-                                        const domes = $(
-                                            '[data-e2e="search-card-user-unique-id"]'
-                                        );
-                                        if (domes[0]) {
-                                            startDetectionFun(domes);
-                                        }
-                                    } else {
-                                        if (button) {
-                                            button.dispatchEvent(clickEvent);
-                                        }
-                                    }
-                                }
-                            });
-                        });
-                        const targetElement = document.body;
-                        const config = {
-                            childList: true,
-                            attributes: true,
-                            subtree: true,
-                        };
-                        // 启动观察器并开始监听
-                        observer.observe(targetElement, config);
-                    } else {
-                        let time = setInterval(() => {
-                            const domes = $(
-                                '[data-e2e="search-card-user-unique-id"]'
-                            );
-                            if (domes[0]) {
-                                clearInterval(time);
-                                startDetectionFun(domes);
-                            }
-                        }, 1000);
                     }
-                });
+                }, 1000);
             })();
             break;
     }
@@ -89,7 +48,6 @@ function debounce(func, wait) {
 }
 
 const startDetectionFun = debounce((domes) => {
-    console.log(13212, domes, '!===>>');
     if (!ifsend) return;
     let arr = [];
     for (const iterator of domes) {

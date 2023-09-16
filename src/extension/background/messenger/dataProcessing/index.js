@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
 
-async function getTabs() {
+export async function getTabs() {
     const currentWindow = await browser.windows.getCurrent({
         populate: true,
         windowTypes: ['normal'],
@@ -81,4 +81,5 @@ export default {
     getName,
     getDetails,
     clickGoVideo,
+    getTabs,
 };
