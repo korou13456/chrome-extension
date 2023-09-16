@@ -2,11 +2,11 @@
 
 import axios from 'axios';
 
-const DEV_BASE_URL = 'http://127.0.0.1:8085/api-go';
-// const BASE_URL = 'https://backendnew.coupert.com/api-go';
+// const BASE_URL = 'http://127.0.0.1:8085/api-go';
+const BASE_URL = 'https://backendnew.coupert.com/api-go';
 
 const api = axios.create({
-    baseURL: DEV_BASE_URL,
+    baseURL: BASE_URL,
     timeout: 10000,
 });
 
