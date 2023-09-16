@@ -80,18 +80,20 @@ export default async function main(source, action, data) {
                         (fans == 0 && amount == 0)
                     ) {
                         // 判断当前名字是否重复
-                        const { data } = {
+                        const { data: urlData } = {
                             ...(await postFormData('/tt_name_search', {
                                 name,
                             })),
                         };
+                        const { data } = { ...urlData };
                         if (!data) {
-                            const { code } = await postFormData(
+                            const { data: nameData } = await postFormData(
                                 '/tt_name_push',
                                 {
                                     name,
                                 }
                             );
+                            const { code } = { ...nameData };
                             if (code == 0) {
                                 Arr.push(obj);
                             } else {
