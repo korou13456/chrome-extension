@@ -58,9 +58,6 @@ export default async function crmcollection(data, active) {
                         countryString += `${title}:${value};`;
                     }
                 }
-
-                console.log(tcmUrl, '!-->>');
-
                 if (!ifCountry) {
                     setTimeout(() => {
                         num++;

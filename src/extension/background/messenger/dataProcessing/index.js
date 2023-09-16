@@ -64,6 +64,18 @@ export async function clickGoVideo() {
     }
 }
 
+export async function getTime() {
+    const tabs = await getTabs();
+    try {
+        const response = await browser.tabs.sendMessage(tabs[0].id, {
+            action: 'dataProcessing:getTime',
+        });
+        return { response, tabs };
+    } catch (e) {
+        return getTime();
+    }
+}
+
 export async function lazyFun() {
     const tabs = await getTabs();
     try {

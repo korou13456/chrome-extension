@@ -15,7 +15,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     const demo = $('.el-table__row')[0];
                     if (demo || num == 10) {
                         clearInterval(time);
-                        console.log(total, '!---><>>');
                         if (total == 0) {
                             clearInterval(time);
                             skipFun(name);
@@ -36,17 +35,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                             let num = -1;
                             for (let i = 0; i < nameArr.length; i++) {
                                 const Newname = nameArr[i].innerText;
-                                console.log(
-                                    nameArr,
-                                    nameArr[i].innerText,
-                                    name,
-                                    '!--->>>>>,><>>>>>'
-                                );
-
-                                console.log(Newname, name, '!--->>>>>,><>>>>>');
                                 if (Newname == name) num = i;
                             }
-                            console.log(num, '!--->>>=====');
                             if (num == -1) {
                                 skipFun(name);
                                 return;

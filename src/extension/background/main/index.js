@@ -10,6 +10,7 @@ import {
     clickGoVideo,
     lazyFun,
     getTabs,
+    getTime,
 } from '../messenger/dataProcessing';
 
 import { enterFun } from '../messenger/redskins';
@@ -214,7 +215,9 @@ async function getDate(number, name) {
     obj['amount'] = amountArrFun(amountArr);
     obj['url'] = 'https://www.tiktok.com/@' + name;
     obj['email'] = extractEmail(emailText);
-    const { response, tabs } = { ...(await clickGoVideo()) };
+    await clickGoVideo();
+    await delay(3000);
+    const { response, tabs } = { ...(await getTime()) };
     const { time } = { ...response };
 
     obj['time'] = time;

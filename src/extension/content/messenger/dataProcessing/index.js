@@ -48,16 +48,26 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
         case 'dataProcessing:GoVideo':
             (async () => {
-                const demo = $('.tiktok-xsheez-DivPlayerContainer');
-                const clickEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window,
-                });
-                if (demo[0]) {
-                    demo[0].dispatchEvent(clickEvent);
-                }
+                setTimeout(() => {
+                    const demo = document.querySelector(
+                        '[data-e2e="user-post-item-desc"]'
+                    );
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window,
+                    });
+                    if (demo) {
+                        console.log(demo, '!====');
+                        demo.dispatchEvent(clickEvent);
+                    }
+                }, 2000);
+            })();
+            break;
+        case 'dataProcessing:getTime':
+            (() => {
                 const time = getTime();
+                console.log(time);
                 const response = {
                     time,
                 };
