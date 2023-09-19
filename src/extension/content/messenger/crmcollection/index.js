@@ -64,6 +64,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 const response = {
                     data: getData(),
                 };
+                console.log(response);
                 sendResponse(response);
             })();
             break;
@@ -80,67 +81,72 @@ async function skipFun(name) {
 }
 
 function getData() {
-    // #1
-    const name =
-        document.querySelector('.user-name div').textContent.trim() || null;
-    // #2
-    const signature =
-        $(
-            '.basic-info .base-info-item .el-popover__reference-wrapper'
-        ).text() || '未找到签名';
-    // #3
-    const fansNumber =
-        document.querySelector(
-            '.author-data-card .data-item:first-child span.font-semibold'
-        ).innerText || '';
-    // #4
-    const averageNumber =
-        document.querySelector(
-            '.author-data-card .data-item:nth-child(2) span.font-semibold'
-        ).innerText || '';
+    try {
+        // #1
+        const name =
+            document.querySelector('.user-name div').textContent.trim() || null;
+        // #2
+        const signature =
+            $(
+                '.basic-info .base-info-item .el-popover__reference-wrapper'
+            ).text() || '未找到签名';
+        // #3
+        const fansNumber =
+            document.querySelector(
+                '.author-data-card .data-item:first-child span.font-semibold'
+            ).innerText || '';
+        // #4
+        const averageNumber =
+            document.querySelector(
+                '.author-data-card .data-item:nth-child(2) span.font-semibold'
+            ).innerText || '';
 
-    // #5
-    const interactionRate =
-        document.querySelector(
-            '.author-data-card .data-item:last-child span.font-semibold'
-        ).innerText || '';
+        // #5
+        const interactionRate =
+            document.querySelector(
+                '.author-data-card .data-item:last-child span.font-semibold'
+            ).innerText || '';
 
-    // #6
-    const ProportionOf = document.querySelector(
-        '.author-audience .gender-icon + .profile-val'
-    ).innerText;
+        // #6
+        const ProportionOf = document.querySelector(
+            '.author-audience .gender-icon + .profile-val'
+        ).innerText;
 
-    // #11
-    function CountryRateFun() {
-        let datas = [];
-        const eles = document.querySelectorAll('#world_map+div .line-percent');
-        for (let ele of eles) {
-            let data = {};
-            data.title = ele.querySelector('h4').innerText;
-            data.value = ele.querySelector('.percent').innerText;
-            datas.push(data);
-        }
-        return datas.length > 0 ? datas : '无数据';
+        const countryRate = CountryRateFun();
+
+        // 获取年龄占比
+        const title = document.querySelector('.profile-title').innerText;
+        const ValueRate =
+            document.querySelectorAll('.profile-val')[2].innerText;
+
+        const url = window.location.toString();
+
+        return {
+            name,
+            signature,
+            fansNumber,
+            averageNumber,
+            interactionRate,
+            ProportionOf,
+            countryRate,
+            title,
+            ValueRate,
+            url,
+        };
+    } catch (error) {
+        return skipFun();
     }
+}
 
-    const countryRate = CountryRateFun();
-
-    // 获取年龄占比
-    const title = document.querySelector('.profile-title').innerText;
-    const ValueRate = document.querySelectorAll('.profile-val')[2].innerText;
-
-    const url = window.location.toString();
-
-    return {
-        name,
-        signature,
-        fansNumber,
-        averageNumber,
-        interactionRate,
-        ProportionOf,
-        countryRate,
-        title,
-        ValueRate,
-        url,
-    };
+// #11
+function CountryRateFun() {
+    let datas = [];
+    const eles = document.querySelectorAll('#world_map+div .line-percent');
+    for (let ele of eles) {
+        let data = {};
+        data.title = ele.querySelector('h4').innerText;
+        data.value = ele.querySelector('.percent').innerText;
+        datas.push(data);
+    }
+    return datas.length > 0 ? datas : '无数据';
 }

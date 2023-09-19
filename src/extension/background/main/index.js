@@ -66,17 +66,10 @@ export default async function main(source, action, data) {
                     is_it_up_to_date,
                     name,
                 } = { ...obj };
-
-                console.log(
-                    is_it_up_to_date,
-                    fans >= 10000,
-                    amount >= 100000,
-                    '--->>>>===='
-                );
-
+                // 100000
                 if (is_it_up_to_date) {
                     if (
-                        (fans >= 10000 && amount >= 100000) ||
+                        (fans >= 10000 && amount >= 50000) ||
                         (fans == 0 && amount == 0)
                     ) {
                         // 判断当前名字是否重复
@@ -136,9 +129,9 @@ export default async function main(source, action, data) {
                 }
 
                 if (num >= NameArr.length - 5) {
-                    await delay(2000);
+                    await delay(4000);
                     lazyFun();
-                    await delay(2000);
+                    await delay(3000);
                     await enterFun();
                 } else {
                     main('', 'getData', '');
