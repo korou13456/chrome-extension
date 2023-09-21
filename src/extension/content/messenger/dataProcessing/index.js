@@ -67,7 +67,6 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         case 'dataProcessing:getTime':
             (() => {
                 const time = getTime();
-                console.log(time);
                 const response = {
                     time,
                 };
@@ -95,7 +94,7 @@ function getName(num) {
 
 function getTime() {
     try {
-        let time = $('[data-e2e="browser-nickname"]>span+span').text();
+        let time = $('[data-e2e="browser-nickname"]>span+span').innerText;
         if (time) {
             return time;
         }

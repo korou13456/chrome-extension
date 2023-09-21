@@ -122,14 +122,14 @@ export default async function main(source, action, data) {
                     };
                     await axios.post(webhookUrl, message);
                     const tabs = await getTabs();
-                    browser.tabs.remove(tabs[0].id);
+                    await browser.tabs.remove(tabs[0].id);
                     num = 0;
                     redskins([]);
                     return;
                 }
 
+                await delay(2000);
                 if (num >= NameArr.length - 5) {
-                    await delay(4000);
                     lazyFun();
                     await delay(3000);
                     await enterFun();
@@ -218,7 +218,7 @@ async function getDate(number, name) {
     obj['time'] = time;
 
     obj['is_it_up_to_date'] = TimeProcessing(time);
-    browser.tabs.remove(tabs[0].id);
+    await browser.tabs.remove(tabs[0].id);
     return obj;
 }
 
