@@ -105,7 +105,7 @@ export default async function main(source, action, data) {
                     await Fun(Arr);
                     Arr = [];
                 }
-                console.log(obj, Arr, num, '---===>>>');
+                console.log(obj, Arr, num, '---===>>>==');
                 num++;
                 if (num == NameArr.length) {
                     NameArr = [];

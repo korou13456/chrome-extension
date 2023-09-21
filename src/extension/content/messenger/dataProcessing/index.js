@@ -29,12 +29,14 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         case 'dataProcessing:getDetails':
             (() => {
                 const fansNum = $('[data-e2e="followers-count"]').text();
-                const amount = $('[data-e2e="video-views"]');
+                const amount = document.querySelectorAll(
+                    '[data-e2e="video-views"]'
+                );
                 const emailText = $('[data-e2e="user-bio"]').text();
                 let amountArr = [];
                 for (let i = 0; i < amount.length; i++) {
                     if (!amount[i]) continue;
-                    amountArr.push(amount[i].textContent.trim());
+                    amountArr.push(amount[i].innerText.trim());
                     if (amountArr.length >= 12) break;
                 }
                 const response = {
@@ -58,7 +60,6 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
                         view: window,
                     });
                     if (demo) {
-                        console.log(demo, '!====');
                         demo.dispatchEvent(clickEvent);
                     }
                 }, 2000);
@@ -94,7 +95,9 @@ function getName(num) {
 
 function getTime() {
     try {
-        let time = $('[data-e2e="browser-nickname"]>span+span').innerText;
+        let time = document.querySelector(
+            '[data-e2e="browser-nickname"] > span + span'
+        ).innerText;
         if (time) {
             return time;
         }
