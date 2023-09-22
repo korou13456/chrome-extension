@@ -50,19 +50,20 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
         case 'dataProcessing:GoVideo':
             (async () => {
-                setTimeout(() => {
+                let timer = setInterval(() => {
                     const demo = document.querySelector(
                         '[data-e2e="user-post-item-desc"]'
                     );
-                    const clickEvent = new MouseEvent('click', {
-                        bubbles: true,
-                        cancelable: true,
-                        view: window,
-                    });
                     if (demo) {
+                        clearInterval(timer);
+                        const clickEvent = new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window,
+                        });
                         demo.dispatchEvent(clickEvent);
                     }
-                }, 2000);
+                }, 1000);
             })();
             break;
         case 'dataProcessing:getTime':

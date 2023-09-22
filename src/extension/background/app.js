@@ -7,3 +7,5 @@ import './messenger/redskins';
 import BrowserStorage from 'shared/browser-storage';
 
 window.BrowserStorage = BrowserStorage;
+
+console.log('====1====1');
