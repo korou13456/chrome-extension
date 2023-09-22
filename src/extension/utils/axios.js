@@ -28,6 +28,7 @@ export const postUpload = (url, file) => {
     data.append('file', file);
     return api.post(url, data, {
         headers: {
+            Referer: '123',
             'Content-Type': 'multipart/form-data',
         },
     });
