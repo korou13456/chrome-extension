@@ -108,9 +108,7 @@ function getData() {
             ).innerText || '';
 
         // #6
-        const ProportionOf = document.querySelector(
-            '.author-audience .gender-icon + .profile-val'
-        ).innerText;
+        const ProportionOf = $('.Female .female div')[1].innerText || '';
 
         const countryRate = CountryRateFun();
 
