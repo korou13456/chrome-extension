@@ -29,14 +29,12 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
         case 'dataProcessing:getDetails':
             (() => {
                 const fansNum = $('[data-e2e="followers-count"]').text();
-                const amount = document.querySelectorAll(
-                    '[data-e2e="video-views"]'
-                );
+                const amount = $('[data-e2e="video-views"]');
                 const emailText = $('[data-e2e="user-bio"]').text();
                 let amountArr = [];
                 for (let i = 0; i < amount.length; i++) {
                     if (!amount[i]) continue;
-                    amountArr.push(amount[i].innerText.trim());
+                    amountArr.push(amount[i].textContent.trim());
                     if (amountArr.length >= 12) break;
                 }
                 const response = {
@@ -50,20 +48,19 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
         case 'dataProcessing:GoVideo':
             (async () => {
-                let timer = setInterval(() => {
+                setTimeout(() => {
                     const demo = document.querySelector(
                         '[data-e2e="user-post-item-desc"]'
                     );
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window,
+                    });
                     if (demo) {
-                        clearInterval(timer);
-                        const clickEvent = new MouseEvent('click', {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window,
-                        });
                         demo.dispatchEvent(clickEvent);
                     }
-                }, 1000);
+                }, 2000);
             })();
             break;
         case 'dataProcessing:getTime':
@@ -96,9 +93,7 @@ function getName(num) {
 
 function getTime() {
     try {
-        let time = document.querySelector(
-            '[data-e2e="browser-nickname"] > span + span'
-        ).innerText;
+        let time = $('[data-e2e="browser-nickname"]>span+span').text();
         if (time) {
             return time;
         }
