@@ -24,7 +24,9 @@ let NameArr = [];
 let num = 0;
 
 let Arr = [];
-// 去重使用
+
+// 当前词进入红人统计
+let thisNum = 0;
 
 let key_word = '';
 
@@ -59,6 +61,7 @@ export default async function main(source, action, data) {
             break;
         case 'getData':
             (async () => {
+                let ifCurrentlyConforms = false;
                 const obj = await getDate(num, NameArr[num]);
                 const {
                     fans = 0,
@@ -88,6 +91,7 @@ export default async function main(source, action, data) {
                             );
                             const { code } = { ...nameData };
                             if (code == 0) {
+                                ifCurrentlyConforms = true;
                                 Arr.push(obj);
                             } else {
                                 const message = {
@@ -101,6 +105,32 @@ export default async function main(source, action, data) {
                         }
                     }
                 }
+
+                if (ifCurrentlyConforms) {
+                    thisNum = 0;
+                } else {
+                    thisNum++;
+                }
+                if (thisNum >= 50) {
+                    NameArr = [];
+                    //  要发送的消息内容
+                    const message = {
+                        msg_type: 'text',
+                        content: {
+                            text:
+                                key_word +
+                                '超过50条没有筛选出1条符合条件的红人',
+                        },
+                    };
+                    thisNum = 0;
+                    await axios.post(webhookUrl, message);
+                    const tabs = await getTabs();
+                    await browser.tabs.remove(tabs[0].id);
+                    num = 0;
+                    redskins([]);
+                    return;
+                }
+
                 if (Arr.length >= 100) {
                     await Fun(Arr);
                     Arr = [];
@@ -120,6 +150,7 @@ export default async function main(source, action, data) {
                                 '条数据',
                         },
                     };
+                    thisNum = 0;
                     await axios.post(webhookUrl, message);
                     const tabs = await getTabs();
                     await browser.tabs.remove(tabs[0].id);
