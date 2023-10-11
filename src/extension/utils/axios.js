@@ -18,6 +18,7 @@ export const postFormData = (url, formData) => {
     data.append('name', formData.name);
     return api.post(url, data, {
         headers: {
+            Referer: '123',
             'Content-Type': 'multipart/form-data',
         },
     });
