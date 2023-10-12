@@ -75,33 +75,37 @@ export default async function main(source, action, data) {
                         (fans >= 10000 && amount >= 50000) ||
                         (fans == 0 && amount == 0)
                     ) {
-                        // 判断当前名字是否重复
-                        const { data: urlData } = {
-                            ...(await postFormData('/tt_name_search', {
-                                name,
-                            })),
-                        };
-                        const { data } = { ...urlData };
-                        if (!data) {
-                            const { data: nameData } = await postFormData(
-                                '/tt_name_push',
-                                {
+                        try {
+                            // 判断当前名字是否重复
+                            const { data: urlData } = {
+                                ...(await postFormData('/tt_name_search', {
                                     name,
+                                })),
+                            };
+                            const { data } = { ...urlData };
+                            if (!data) {
+                                const { data: nameData } = await postFormData(
+                                    '/tt_name_push',
+                                    {
+                                        name,
+                                    }
+                                );
+                                const { code } = { ...nameData };
+                                if (code == 0) {
+                                    ifCurrentlyConforms = true;
+                                    Arr.push(obj);
+                                } else {
+                                    const message = {
+                                        msg_type: 'text',
+                                        content: {
+                                            text: '输入库插入名字失败' + name,
+                                        },
+                                    };
+                                    await axios.post(webhookUrl, message);
                                 }
-                            );
-                            const { code } = { ...nameData };
-                            if (code == 0) {
-                                ifCurrentlyConforms = true;
-                                Arr.push(obj);
-                            } else {
-                                const message = {
-                                    msg_type: 'text',
-                                    content: {
-                                        text: '输入库插入名字失败' + name,
-                                    },
-                                };
-                                await axios.post(webhookUrl, message);
                             }
+                        } catch (error) {
+                            console.log(error, name, '!====>>>');
                         }
                     }
                 }

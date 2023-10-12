@@ -1,5 +1,3 @@
-// api.js
-
 import axios from 'axios';
 
 // const BASE_URL = 'http://127.0.0.1:8085/api-go';
@@ -18,7 +16,6 @@ export const postFormData = (url, formData) => {
     data.append('name', formData.name);
     return api.post(url, data, {
         headers: {
-            Referer: '123',
             'Content-Type': 'multipart/form-data',
         },
     });
@@ -29,7 +26,6 @@ export const postUpload = (url, file) => {
     data.append('file', file);
     return api.post(url, data, {
         headers: {
-            Referer: '123',
             'Content-Type': 'multipart/form-data',
         },
     });
