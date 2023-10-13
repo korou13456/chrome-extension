@@ -52,8 +52,8 @@ export default async function crmcollection(data, active) {
                 if (!isEmpty(defaultCountryRate)) {
                     for (let i = 0; i < defaultCountryRate.length; i++) {
                         const { title, value } = { ...defaultCountryRate[i] };
-                        if (title == '德国') {
-                            if (value.replace('%', '') >= 70) ifCountry = true;
+                        if (title == '德国' || title == '英国') {
+                            if (value.replace('%', '') >= 50) ifCountry = true;
                         }
                         countryString += `${title}:${value};`;
                     }
