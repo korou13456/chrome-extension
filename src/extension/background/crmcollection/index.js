@@ -52,7 +52,7 @@ export default async function crmcollection(data, active) {
                 if (!isEmpty(defaultCountryRate)) {
                     for (let i = 0; i < defaultCountryRate.length; i++) {
                         const { title, value } = { ...defaultCountryRate[i] };
-                        if (title == '德国' || title == '英国') {
+                        if (title == '美国' || title == '英国') {
                             if (value.replace('%', '') >= 50) ifCountry = true;
                         }
                         countryString += `${title}:${value};`;
@@ -271,6 +271,7 @@ async function Fun2(list = []) {
         'Time',
         'Key_Word',
         'Url',
+        'Email',
     ]);
 
     list.forEach((item) => {
@@ -281,6 +282,7 @@ async function Fun2(list = []) {
             item[4],
             item[5],
             item[6],
+            item[7],
         ]);
     });
 
