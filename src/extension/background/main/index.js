@@ -65,11 +65,13 @@ export default async function main(source, action, data) {
                     is_it_up_to_date,
                     name,
                 } = { ...obj };
-                // 100000
+
                 if (is_it_up_to_date) {
                     if (
-                        (fans >= 10000 && amount >= 50000) ||
-                        (fans == 0 && amount == 0)
+                        fans >= 1000 &&
+                        fans <= 100000 &&
+                        amount >= 1000 &&
+                        amount <= 30000
                     ) {
                         try {
                             // 判断当前名字是否重复
@@ -132,10 +134,9 @@ export default async function main(source, action, data) {
                     return;
                 }
 
-                await delay(2000);
                 if (num >= NameArr.length - 5) {
                     lazyFun();
-                    await delay(3000);
+                    await delay(1000);
                     await enterFun();
                 } else {
                     main('', 'getData', '');
@@ -215,7 +216,7 @@ async function getDate(number, name) {
     obj['url'] = 'https://www.tiktok.com/@' + name;
     obj['email'] = extractEmail(emailText);
     await clickGoVideo();
-    await delay(3000);
+    await delay(2000);
     const { response, tabs } = { ...(await getTime()) };
     const { time } = { ...response };
 
