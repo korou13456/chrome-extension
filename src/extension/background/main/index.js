@@ -61,18 +61,13 @@ export default async function main(source, action, data) {
                 const obj = await getDate(num, NameArr[num]);
                 const {
                     fans = 0,
-                    amount = 0,
+                    // amount = 0, // 播放量
                     is_it_up_to_date,
                     name,
                 } = { ...obj };
 
                 if (is_it_up_to_date) {
-                    if (
-                        fans >= 1000 &&
-                        fans <= 100000 &&
-                        amount >= 1000 &&
-                        amount <= 30000
-                    ) {
+                    if (fans >= 1000 && fans <= 100000) {
                         try {
                             // 判断当前名字是否重复
                             const { data: urlData } = {
@@ -202,6 +197,7 @@ async function Fun(list = []) {
     await axios.post(webhookUrl, message);
 }
 
+let getNum = 0;
 async function getDate(number, name) {
     let obj = {};
     obj['name'] = name;
@@ -216,15 +212,24 @@ async function getDate(number, name) {
     obj['url'] = 'https://www.tiktok.com/@' + name;
     obj['email'] = extractEmail(emailText);
     await clickGoVideo();
-    await delay(2000);
-    const { response, tabs } = { ...(await getTime()) };
-    const { time } = { ...response };
-
+    getNum = 0;
+    const { time, tabs } = { ...(await getTimeFun()) };
     obj['time'] = time;
 
     obj['is_it_up_to_date'] = TimeProcessing(time);
     await browser.tabs.remove(tabs[0].id);
     return obj;
+}
+
+async function getTimeFun() {
+    await delay(1000);
+    const { response, tabs } = { ...(await getTime()) };
+    const { time } = { ...response };
+    if (time || getNum >= 10) {
+        return { time, tabs };
+    }
+    getNum++;
+    return await getTimeFun();
 }
 
 function TimeProcessing(time) {
