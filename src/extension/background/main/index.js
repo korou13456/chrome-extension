@@ -102,7 +102,7 @@ export default async function main(source, action, data) {
                     }
                 }
 
-                if (Arr.length >= 100) {
+                if (Arr.length >= 300) {
                     await Fun(Arr);
                     Arr = [];
                 }
@@ -188,10 +188,11 @@ async function Fun(list = []) {
         link.click();
         URL.revokeObjectURL(url);
     });
+    const num = list.length;
     const message = {
         msg_type: 'text',
         content: {
-            text: '完成爬取100条，注意查看',
+            text: '完成爬取' + num + '条，注意查看',
         },
     };
     await axios.post(webhookUrl, message);
