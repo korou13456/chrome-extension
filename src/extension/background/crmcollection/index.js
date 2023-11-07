@@ -15,8 +15,9 @@ const webhookUrl =
     'https://open.feishu.cn/open-apis/bot/v2/hook/49623249-6703-4ed3-a233-2b1c1e355575';
 
 const headers = {
+    Accept: 'application/json, text/plain, */*',
+    'Accept-Language': 'zh-CN,zh;q=0.9',
     authKey: 'f4d01d0db3a57484bbc37daf58c96fe0',
-    'content-type': 'application/json',
     sessionId: 'lo06p3ctg949ij69me7j9st1b7',
 };
 

@@ -8,4 +8,4 @@ import BrowserStorage from 'shared/browser-storage';
 
 window.BrowserStorage = BrowserStorage;
 
-console.log('====1====123');
+console.log('====1====12311');

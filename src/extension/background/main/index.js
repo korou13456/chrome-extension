@@ -61,13 +61,13 @@ export default async function main(source, action, data) {
                 const obj = await getDate(num, NameArr[num]);
                 const {
                     fans = 0,
-                    // amount = 0, // 播放量
+                    amount = 0, // 播放量
                     is_it_up_to_date,
                     name,
                 } = { ...obj };
 
                 if (is_it_up_to_date) {
-                    if (fans >= 1000 && fans <= 100000) {
+                    if (fans >= 10000 && amount >= 15000) {
                         try {
                             // 判断当前名字是否重复
                             const { data: urlData } = {
@@ -102,7 +102,7 @@ export default async function main(source, action, data) {
                     }
                 }
 
-                if (Arr.length >= 300) {
+                if (Arr.length >= 100) {
                     await Fun(Arr);
                     Arr = [];
                 }
