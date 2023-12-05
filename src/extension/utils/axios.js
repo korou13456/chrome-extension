@@ -21,6 +21,17 @@ export const postFormData = (url, formData) => {
     });
 };
 
+export const postKocData = (url, list) => {
+    console.log(list, '!====>>');
+    const data = new FormData();
+    data.append('data', JSON.stringify(list));
+    return api.post(url, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+
 export const postUpload = (url, file) => {
     const data = new FormData();
     data.append('file', file);

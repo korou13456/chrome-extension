@@ -7,3 +7,5 @@ import './messenger/dataProcessing';
 import './messenger/crmcollection';
 
 import './messenger/redskins';
+
+import './messenger/kocVideo';

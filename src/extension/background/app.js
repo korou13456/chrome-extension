@@ -4,8 +4,10 @@ import './messenger/crmcollection';
 
 import './messenger/redskins';
 
+import './messenger/kocVideo';
+
 import BrowserStorage from 'shared/browser-storage';
 
 window.BrowserStorage = BrowserStorage;
 
-console.log('====1====12311');
+console.log('====1====123122');

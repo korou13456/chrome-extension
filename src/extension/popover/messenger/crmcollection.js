@@ -12,8 +12,13 @@ export function GetRedskinsInfo(data) {
     return Messenger.send('redskins', { action: 'start', data }, { to: 'bg' });
 }
 
+export function GetKocVideoData(data) {
+    return Messenger.send('koc', { action: 'start', data }, { to: 'bg' });
+}
+
 export default {
     push,
     UploadCrm,
     GetRedskinsInfo,
+    GetKocVideoData,
 };
