@@ -52,6 +52,19 @@ export async function getDetails(num) {
     }
 }
 
+export async function getAmount(num) {
+    const tabs = await getTabs();
+    try {
+        const response = await browser.tabs.sendMessage(tabs[0].id, {
+            action: 'dataProcessing:getAmount',
+            num,
+        });
+        return response;
+    } catch (e) {
+        return getAmount(num);
+    }
+}
+
 export async function clickGoVideo() {
     const tabs = await getTabs();
     try {

@@ -77,6 +77,10 @@ async function getData(demo, amount) {
         const currentDate = new Date();
         const fourDaysAgo = new Date(currentDate);
         time = fourDaysAgo.setDate(currentDate.getDate() - 7);
+    } else if (time.includes('小时')) {
+        const currentDate = new Date();
+        const fourDaysAgo = new Date(currentDate);
+        time = fourDaysAgo.setDate(currentDate.getDate());
     } else {
         const currentYear = new Date().getFullYear();
         const formattedDate = currentYear + '-' + time.replace(' · ', '');

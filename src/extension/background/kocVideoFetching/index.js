@@ -5,6 +5,7 @@ import BrowserStorage from 'shared/browser-storage';
 import ExcelJS from 'exceljs';
 import axios from 'axios';
 import { postKocData } from 'extension/utils/axios';
+import dayjs from 'dayjs';
 
 let data = [];
 let num = 0;
@@ -64,7 +65,6 @@ function isNumber(value) {
 }
 
 function parseNumberWithKAndM(input) {
-    console.log(input);
     const numericPart = parseFloat(input);
     if (input.endsWith('k') || input.endsWith('K')) {
         return numericPart * 1000;
@@ -76,22 +76,22 @@ function parseNumberWithKAndM(input) {
 }
 
 async function Integration(arr, thisDate) {
-    const [, port_id, in_charge, name, userUrl] = [...thisDate];
+    const [, port_id, in_charge, name, user_url] = [...thisDate];
     arr.forEach((v) => {
-        const { amount } = { ...v };
-        console.log(v);
+        const { amount, time } = { ...v };
         dataArr.push({
             ...v,
+            release_time: dayjs(new Date(time)).format('YYYY-MM-DD 00:00:00'),
             port_id: (isNumber(port_id * 1) && port_id * 1) || 0,
             amount: parseNumberWithKAndM(String(amount)),
             in_charge,
             name,
-            userUrl,
+            user_url,
         });
     });
     console.log(dataArr, '!====>>>');
 
-    if (dataArr.length >= 100) {
+    if (dataArr.length >= 50) {
         await Fun(dataArr);
         dataArr = [];
     }

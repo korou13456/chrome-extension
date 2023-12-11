@@ -11,6 +11,7 @@ import {
     lazyFun,
     getTabs,
     getTime,
+    getAmount,
 } from '../messenger/dataProcessing';
 
 import { enterFun } from '../messenger/redskins';
@@ -204,9 +205,12 @@ async function getDate(number, name) {
     obj['name'] = name;
     obj['keyWord'] = key_word;
     browser.tabs.create({ url: 'https://www.tiktok.com/@' + name });
-    const { fansNum, amountArr, emailText } = {
+    const { fansNum, emailText } = {
         ...(await getDetails(number)),
     };
+    await delay(2000);
+
+    const { amountArr } = { ...(await getAmount(number)) };
 
     obj['fans'] = parseNumberWithKAndM(fansNum);
     obj['amount'] = amountArrFun(amountArr);
