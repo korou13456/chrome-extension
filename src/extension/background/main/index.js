@@ -260,13 +260,17 @@ function amountArrFun(amountArr) {
 }
 
 function parseNumberWithKAndM(input) {
-    const numericPart = parseFloat(input);
-    if (input.endsWith('k') || input.endsWith('K')) {
-        return numericPart * 1000;
-    } else if (input.endsWith('m') || input.endsWith('M')) {
-        return numericPart * 1000000;
-    } else {
-        return numericPart;
+    try {
+        const numericPart = parseFloat(input);
+        if (input.endsWith('k') || input.endsWith('K')) {
+            return numericPart * 1000;
+        } else if (input.endsWith('m') || input.endsWith('M')) {
+            return numericPart * 1000000;
+        } else {
+            return numericPart;
+        }
+    } catch (error) {
+        return 0;
     }
 }
 
