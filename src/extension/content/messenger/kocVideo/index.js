@@ -81,12 +81,22 @@ async function getData(demo, amount) {
         const currentDate = new Date();
         const fourDaysAgo = new Date(currentDate);
         time = fourDaysAgo.setDate(currentDate.getDate());
+    } else if (time.includes('-')) {
+        const formattedDate = time.replace(' · ', '');
+        const dateParts = formattedDate.split('-');
+        if (dateParts[0].length === 4) {
+            time = formattedDate;
+        } else {
+            const currentYear = new Date().getFullYear();
+            const formattedDate = currentYear + '-' + time.replace(' · ', '');
+            time = formattedDate;
+        }
     } else {
         const currentYear = new Date().getFullYear();
         const formattedDate = currentYear + '-' + time.replace(' · ', '');
         time = formattedDate;
     }
-    console.log(amount, time, url, '!=====>>');
+
     return {
         amount: parseNumberWithKAndM(amount.textContent),
         time: dayjs(time).format('YYYY-MM-DD'),
