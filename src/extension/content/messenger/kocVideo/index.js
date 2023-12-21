@@ -78,9 +78,10 @@ async function getData(demo, amount) {
         const fourDaysAgo = new Date(currentDate);
         time = fourDaysAgo.setDate(currentDate.getDate() - 7);
     } else if (time.includes('小时')) {
+        const match = time.match(/\d+/);
         const currentDate = new Date();
         const fourDaysAgo = new Date(currentDate);
-        time = fourDaysAgo.setDate(currentDate.getDate());
+        time = fourDaysAgo.setHours(currentDate.getHours() - match);
     } else if (time.includes('-')) {
         const formattedDate = time.replace(' · ', '');
         const dateParts = formattedDate.split('-');
@@ -100,6 +101,7 @@ async function getData(demo, amount) {
     return {
         amount: parseNumberWithKAndM(amount.textContent),
         time: dayjs(time).format('YYYY-MM-DD'),
+        // time: '2022-12-11',
         url,
     };
 }

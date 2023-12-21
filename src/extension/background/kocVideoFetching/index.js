@@ -131,6 +131,7 @@ async function Fun(list = []) {
     // });
     try {
         postKocData('/tt_koc_collect', list);
+        // postKocData('/tt_koc_time_repair', list);
     } catch (error) {
         const message = {
             msg_type: 'text',
@@ -150,6 +151,5 @@ async function Fun(list = []) {
             text: '完成爬取' + num + '条，注意查看',
         },
     };
-    console.log(list, '!====>>>');
     await axios.post(webhookUrl, message);
 }
