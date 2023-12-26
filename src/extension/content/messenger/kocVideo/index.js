@@ -82,6 +82,11 @@ async function getData(demo, amount) {
         const currentDate = new Date();
         const fourDaysAgo = new Date(currentDate);
         time = fourDaysAgo.setHours(currentDate.getHours() - match);
+    } else if (time.includes('分钟')) {
+        const match = time.match(/\d+/);
+        const currentDate = new Date();
+        const fourDaysAgo = new Date(currentDate);
+        time = fourDaysAgo.setMinutes(currentDate.getMinutes() - match);
     } else if (time.includes('-')) {
         const formattedDate = time.replace(' · ', '');
         const dateParts = formattedDate.split('-');
