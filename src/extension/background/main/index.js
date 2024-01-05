@@ -210,8 +210,7 @@ async function getDate(number, name) {
     };
     await delay(2000);
 
-    const { amountArr } = { ...(await getAmount(number)) };
-
+    const { amountArr } = { ...(await getAmountFun()) };
     obj['fans'] = parseNumberWithKAndM(fansNum);
     obj['amount'] = amountArrFun(amountArr);
     obj['url'] = 'https://www.tiktok.com/@' + name;
@@ -224,6 +223,32 @@ async function getDate(number, name) {
     obj['is_it_up_to_date'] = TimeProcessing(time);
     await browser.tabs.remove(tabs[0].id);
     return obj;
+}
+async function getAmountFun() {
+    const { amountArr = [] } = { ...(await getAmount()) };
+    let a = false;
+
+    try {
+        for (let i = 0; i < amountArr.length; i++) {
+            if (parseNumberWithKAndM(amountArr[i]) > 0) a = true;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+    if (a || getNum >= 10) {
+        return { amountArr };
+    }
+
+    getNum++;
+
+    // Create an array of promises for each recursive call
+    const promises = [new Promise((resolve) => setTimeout(resolve, 1000))];
+
+    // Wait for all promises to resolve using Promise.all
+    await Promise.all(promises);
+
+    // Recursive call after the timeout
+    return getAmountFun();
 }
 
 async function getTimeFun() {

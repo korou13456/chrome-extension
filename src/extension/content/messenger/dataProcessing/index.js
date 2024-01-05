@@ -115,4 +115,5 @@ function getTime() {
     } catch (error) {
         return getTime();
     }
+    return getTime();
 }
