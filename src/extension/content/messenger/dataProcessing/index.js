@@ -44,19 +44,23 @@ browser.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
         case 'dataProcessing:getAmount':
             (() => {
-                const amount = document.querySelectorAll(
-                    '[data-e2e="video-views"]'
-                );
-                let amountArr = [];
-                for (let i = 0; i < amount.length; i++) {
-                    if (!amount[i]) continue;
-                    amountArr.push(amount[i].textContent.trim());
-                    if (amountArr.length >= 12) break;
+                try {
+                    const amount = document.querySelectorAll(
+                        '[data-e2e="video-views"]'
+                    );
+                    let amountArr = [];
+                    for (let i = 0; i < amount.length; i++) {
+                        if (!amount[i]) continue;
+                        amountArr.push(amount[i].textContent.trim());
+                        if (amountArr.length >= 12) break;
+                    }
+                    const response = {
+                        amountArr,
+                    };
+                    sendResponse(response);
+                } catch (error) {
+                    sendResponse([]);
                 }
-                const response = {
-                    amountArr,
-                };
-                sendResponse(response);
             })();
 
             break;
