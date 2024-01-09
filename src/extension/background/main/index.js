@@ -20,6 +20,8 @@ import redskins from 'extension/background/redskins';
 
 import { postFormData } from 'extension/utils/axios';
 
+import { isEmpty } from 'lodash';
+
 let NameArr = [];
 
 let num = 0;
@@ -60,6 +62,13 @@ export default async function main(source, action, data) {
         case 'getData':
             (async () => {
                 const obj = await getDate(num, NameArr[num]);
+
+                if (isEmpty(obj)) {
+                    num++;
+                    main('', 'getData', '');
+                    return;
+                }
+
                 const {
                     fans = 0,
                     amount = 0, // 播放量
