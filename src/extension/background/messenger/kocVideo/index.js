@@ -4,7 +4,8 @@ import Messenger from '../index';
 import kocVideoFetching from 'extension/background/kocVideoFetching';
 
 Messenger.on('koc', async (message) => {
-    const { content } = { ...message };
+    const { content, tab } = { ...message };
+    const { id } = { ...tab };
     const { action, data } = { ...content };
     switch (action) {
         case 'start':
@@ -12,37 +13,22 @@ Messenger.on('koc', async (message) => {
             kocVideoFetching('', data);
             break;
         case 'receive':
-            kocVideoFetching('receive', data, await getTabs());
+            kocVideoFetching('receive', data, id);
             break;
         case 'skip':
-            kocVideoFetching('skip', data, await getTabs());
+            kocVideoFetching('skip', data, id);
             break;
     }
 });
 
-async function getTabs() {
-    const currentWindow = await browser.windows.getCurrent({
-        populate: true,
-        windowTypes: ['normal'],
-    });
-    const { id } = { ...currentWindow };
-    const tabs = await browser.tabs.query({
-        active: true,
-        windowId: id,
-    });
-
-    return tabs;
-}
-
 // 获取页面元素
-export async function enterFun() {
-    const tabs = await getTabs();
+export async function enterFun(id) {
     try {
-        const response = await browser.tabs.sendMessage(tabs[0].id, {
+        const response = await browser.tabs.sendMessage(id, {
             action: 'kocVideo:enter',
         });
         return response;
     } catch (e) {
-        return enterFun();
+        return enterFun(id);
     }
 }

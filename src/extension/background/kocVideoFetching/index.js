@@ -14,17 +14,19 @@ const webhookUrl =
 
 let dataArr = [];
 
-export default async function kocVideoFetching(action, userData, tabs) {
+export default async function kocVideoFetching(action, userData, id) {
     switch (action) {
         case 'start':
-            (() => {
+            (async () => {
                 const [, , , , url] = [...userData];
-                browser.tabs.create({
-                    url,
-                });
-                enterFun();
+                const { id } = {
+                    ...(await browser.tabs.create({
+                        url,
+                    })),
+                };
+                console.log(id);
+                enterFun(id);
             })();
-
             break;
         case 'receive': {
             Integration(userData, data[num]);
@@ -33,7 +35,7 @@ export default async function kocVideoFetching(action, userData, tabs) {
                 Fun(dataArr);
                 return;
             }
-            await browser.tabs.remove(tabs[0].id);
+            await browser.tabs.remove(id);
             kocVideoFetching('start', data[num]);
             break;
         }
@@ -47,14 +49,17 @@ export default async function kocVideoFetching(action, userData, tabs) {
                 if (num >= data.length) {
                     return;
                 }
-                await browser.tabs.remove(tabs[0].id);
+                await browser.tabs.remove(id);
                 kocVideoFetching('start', data[num]);
             })();
             break;
         default:
             data = userData;
             if (!_.isEmpty(data[num])) {
-                kocVideoFetching('start', data[num]);
+                for (let i = 0; i < 1; i++) {
+                    kocVideoFetching('start', data[num]);
+                    num++;
+                }
             }
             break;
     }
@@ -112,6 +117,7 @@ async function Fun(list = []) {
         data = [...data, ...list];
         await BrowserStorage.local.set('kocList', data);
         await axios.post(webhookUrl, message);
+        return;
     }
     const num = list.length;
     const message = {
