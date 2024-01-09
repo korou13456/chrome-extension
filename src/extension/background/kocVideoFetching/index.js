@@ -2,7 +2,6 @@ import browser from 'webextension-polyfill';
 import _ from 'lodash';
 import { enterFun } from '../messenger/kocVideo';
 import BrowserStorage from 'shared/browser-storage';
-import ExcelJS from 'exceljs';
 import axios from 'axios';
 import { postKocData } from 'extension/utils/axios';
 import dayjs from 'dayjs';
@@ -12,6 +11,8 @@ let num = 0;
 
 const webhookUrl =
     'https://open.feishu.cn/open-apis/bot/v2/hook/da204390-7a4e-4372-9eec-33baeefe92e8';
+
+let dataArr = [];
 
 export default async function kocVideoFetching(action, userData, tabs) {
     switch (action) {
@@ -29,6 +30,7 @@ export default async function kocVideoFetching(action, userData, tabs) {
             Integration(userData, data[num]);
             num++;
             if (num >= data.length) {
+                Fun(dataArr);
                 return;
             }
             await browser.tabs.remove(tabs[0].id);
@@ -57,8 +59,6 @@ export default async function kocVideoFetching(action, userData, tabs) {
             break;
     }
 }
-
-let dataArr = [];
 
 function isNumber(value) {
     return typeof value === 'number';
@@ -98,37 +98,6 @@ async function Integration(arr, thisDate) {
 }
 
 async function Fun(list = []) {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Sheet1');
-
-    worksheet.addRow([
-        '窗口编码',
-        '负责人',
-        '昵称',
-        '账号主页链接',
-        '播放量',
-        '日期',
-        '视频url',
-    ]);
-
-    // list.forEach((item) => {
-    //     const { PortId, InCharge, name, userUrl, amount, time, url } = {
-    //         ...item,
-    //     };
-    //     worksheet.addRow([PortId, InCharge, name, userUrl, amount, time, url]);
-    // });
-
-    // workbook.xlsx.writeBuffer().then((buffer) => {
-    //     const blob = new Blob([buffer], {
-    //         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    //     });
-    //     const url = URL.createObjectURL(blob);
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.download = 'koc.xlsx';
-    //     link.click();
-    //     URL.revokeObjectURL(url);
-    // });
     try {
         postKocData('/tt_koc_collect', list);
         // postKocData('/tt_koc_time_repair', list);
