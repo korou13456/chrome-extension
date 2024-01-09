@@ -99,7 +99,7 @@ async function Integration(arr, thisDate) {
 
 async function Fun(list = []) {
     try {
-        postKocData('/tt_koc_collect', list);
+        await postKocData('/tt_koc_collect', list);
         // postKocData('/tt_koc_time_repair', list);
     } catch (error) {
         const message = {
