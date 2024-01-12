@@ -59,7 +59,11 @@ async function getData(demo, amount) {
     if (demo) {
         demo.dispatchEvent(clickEvent);
     }
-    let url = window.location.href;
+    const url = window.location.href;
+    const title = document.querySelector(
+        '[data-e2e="browse-video-desc"]'
+    ).innerText;
+
     let time = getTime();
     if (time) {
         const CloseBtn = document.querySelector('[data-e2e="browse-close"]');
@@ -108,6 +112,7 @@ async function getData(demo, amount) {
         time: dayjs(time).format('YYYY-MM-DD'),
         // time: '2022-12-11',
         url,
+        title,
     };
 }
 

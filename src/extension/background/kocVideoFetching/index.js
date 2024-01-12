@@ -94,12 +94,9 @@ async function Integration(arr, thisDate) {
             user_url,
         });
     });
-    console.log(dataArr, '!====>>>');
 
-    if (dataArr.length >= 50) {
-        await Fun(dataArr);
-        dataArr = [];
-    }
+    await Fun(dataArr);
+    dataArr = [];
 }
 
 async function Fun(list = []) {

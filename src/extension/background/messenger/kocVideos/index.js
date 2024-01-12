@@ -22,9 +22,16 @@ Messenger.on('kocs', async (message) => {
     }
 });
 
+let num = 0;
 // 获取页面元素
 export async function enterFun(id) {
     try {
+        if (num >= 5000) {
+            kocVideoFetching('skip', 'aaa', id);
+            num = 0;
+            return;
+        }
+        num++;
         const response = await browser.tabs.sendMessage(id, {
             action: 'kocsVideo:enter',
         });

@@ -43,20 +43,20 @@ export default async function kocVideoFetching(action, userData, id) {
             const {
                 url,
                 title,
-                like = 0,
+                like_num = 0,
                 comments = 0,
                 collection = 0,
-                share = 0,
+                share_num = 0,
             } = {
                 ...userData,
             };
             arr.push({
                 url,
                 title,
-                like,
+                like_num,
                 comments,
                 collection,
-                share,
+                share_num,
             });
             if (arr.length >= 20) {
                 await Fun(arr);

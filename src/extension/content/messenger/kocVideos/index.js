@@ -5,7 +5,7 @@ import Messenger from '../index';
 browser.runtime.onMessage.addListener((request) => {
     const { action } = { ...request };
     switch (action) {
-        case 'kocVideo:enter':
+        case 'kocVideos:enter':
             (async () => {
                 kocVideoEnter();
                 setTimeout(() => {
@@ -48,10 +48,10 @@ async function getData() {
     return {
         url,
         title,
-        like: parseNumberWithKAndM(like),
+        like_num: parseNumberWithKAndM(like),
         comments: parseNumberWithKAndM(comments),
         collection: parseNumberWithKAndM(collection),
-        share: parseNumberWithKAndM(share),
+        share_num: parseNumberWithKAndM(share),
     };
 }
 

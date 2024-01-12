@@ -6,6 +6,8 @@ import './messenger/redskins';
 
 import './messenger/kocVideo';
 
+import './messenger/kocVideos';
+
 import BrowserStorage from 'shared/browser-storage';
 
 window.BrowserStorage = BrowserStorage;

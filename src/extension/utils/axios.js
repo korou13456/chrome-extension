@@ -5,7 +5,7 @@ const BASE_URL = 'https://backendnew.coupert.com/api-go';
 
 const api = axios.create({
     baseURL: BASE_URL,
-    timeout: 10000,
+    timeout: 30000,
 });
 
 export const get = (url, params = {}) => {
