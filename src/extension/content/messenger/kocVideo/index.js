@@ -39,7 +39,7 @@ async function kocVideoEnter() {
 
     if (demos.length <= num + 5) {
         window.scrollTo(0, document.body.scrollHeight);
-        await delay(3000);
+        await delay(1000);
     }
 
     if (demos.length <= num) {
