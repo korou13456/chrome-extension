@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-import _ from 'lodash';
 import { enterFun } from '../messenger/kocVideo';
 import BrowserStorage from 'shared/browser-storage';
 import axios from 'axios';
@@ -18,7 +17,7 @@ export default async function kocVideoFetching(action, userData, id) {
     switch (action) {
         case 'start':
             (async () => {
-                const [, , , , url] = [...userData];
+                const { url } = { ...userData };
                 const { id } = {
                     ...(await browser.tabs.create({
                         url,
@@ -29,6 +28,7 @@ export default async function kocVideoFetching(action, userData, id) {
             })();
             break;
         case 'receive': {
+            console.log(userData, '!----->>');
             Integration(userData, data[num]);
             num++;
             await browser.tabs.remove(id);
@@ -50,8 +50,9 @@ export default async function kocVideoFetching(action, userData, id) {
             })();
             break;
         default:
+            console.log(userData, '!---->>');
             data = userData;
-            if (!_.isEmpty(data[num])) {
+            if (Array.isArray(userData) && userData.length > 0) {
                 kocVideoFetching('start', data[num]);
             }
             break;
@@ -74,9 +75,11 @@ function parseNumberWithKAndM(input) {
 }
 
 async function Integration(arr, thisDate) {
-    const [, port_id, in_charge, name, user_url] = [...thisDate];
+    const { port_id, in_charge, name, user_url } = { ...thisDate };
     arr.forEach((v) => {
-        const { amount, time, title } = { ...v };
+        const { amount, time, title, collection, comments, like_num } = {
+            ...v,
+        };
         dataArr.push({
             ...v,
             release_time: dayjs(new Date(time)).format('YYYY-MM-DD 00:00:00'),
@@ -88,6 +91,9 @@ async function Integration(arr, thisDate) {
             title,
             domain: getDomain(title),
             template: getTemplate(title),
+            collection: Math.round(parseNumberWithKAndM(String(collection))),
+            comments: Math.round(parseNumberWithKAndM(String(comments))),
+            like_num: Math.round(parseNumberWithKAndM(String(like_num))),
         });
     });
 

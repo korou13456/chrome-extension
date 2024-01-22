@@ -32,6 +32,23 @@ export const postKocData = (url, list) => {
     });
 };
 
+export const postKocGet = () => {
+    return api.post(
+        '/koc_account_list',
+        {
+            page: {
+                page_size: 10000,
+                page: 1,
+            },
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+};
+
 export const postUpload = (url, file) => {
     const data = new FormData();
     data.append('file', file);

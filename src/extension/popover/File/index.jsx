@@ -88,26 +88,8 @@ export default function File() {
         }
     };
 
-    const handleUploadKoc = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const data = e.target.result;
-                const workbook = new XLSX.Workbook();
-                await workbook.xlsx.load(data);
-                const worksheet = workbook.getWorksheet(1); // 获取第一个工作表
-                // 解析工作表数据
-                const jsonData = [];
-                worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-                    if (rowNumber > 0) {
-                        jsonData.push(row.values);
-                    }
-                });
-                GetKocVideoData(jsonData);
-            };
-            reader.readAsArrayBuffer(file);
-        }
+    const handleUploadKoc = () => {
+        GetKocVideoData();
     };
 
     const handleUploadKocAmount = (e) => {
@@ -154,7 +136,7 @@ export default function File() {
             </div>
             <div style={{ borderTop: '1px solid #ccc' }}>
                 <h4>koc视频数据拉取</h4>
-                <input type="file" accept=".xlsx" onChange={handleUploadKoc} />
+                <button onClick={handleUploadKoc}>开始</button>
             </div>
             <div style={{ borderTop: '1px solid #ccc' }}>
                 <h4>koc视频数据补充</h4>

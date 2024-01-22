@@ -63,6 +63,15 @@ async function getData(demo, amount) {
     const title = document.querySelector(
         '[data-e2e="browse-video-desc"]'
     ).innerText;
+    const like_num = document.querySelector(
+        '[data-e2e="browse-like-count"]'
+    ).innerText;
+    const comments = document.querySelector(
+        '[data-e2e="browse-comment-count"]'
+    ).innerText;
+    const collection = document.querySelector(
+        '[data-e2e="undefined-count"]'
+    ).innerText;
 
     let time = getTime();
     if (time) {
@@ -113,6 +122,9 @@ async function getData(demo, amount) {
         // time: '2022-12-11',
         url,
         title,
+        like_num,
+        comments,
+        collection,
     };
 }
 
