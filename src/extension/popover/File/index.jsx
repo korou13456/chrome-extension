@@ -136,7 +136,7 @@ export default function File() {
             </div>
             <div style={{ borderTop: '1px solid #ccc' }}>
                 <h4>koc视频数据拉取</h4>
-                <button onClick={handleUploadKoc}>开始</button>
+                <button onClick={handleUploadKoc}>开</button>
             </div>
             <div style={{ borderTop: '1px solid #ccc' }}>
                 <h4>koc视频数据补充</h4>
