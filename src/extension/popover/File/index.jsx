@@ -7,9 +7,8 @@ import {
     GetRedskinsInfo,
     GetKocVideoData,
     GetKocVideoSupplement,
+    AcsGetVideoTitle,
 } from 'extension/popover/messenger/crmcollection';
-
-import { postUpload } from 'extension/utils/axios';
 
 export default function File() {
     const handleFileUpload = (e) => {
@@ -81,13 +80,6 @@ export default function File() {
         }
     };
 
-    const handleUploadEmail = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            postUpload('/tt_email_push', file);
-        }
-    };
-
     const handleUploadKoc = () => {
         GetKocVideoData();
     };
@@ -114,6 +106,28 @@ export default function File() {
         }
     };
 
+    const handleUploadAcsGetVideoTitle = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const data = e.target.result;
+                const workbook = new XLSX.Workbook();
+                await workbook.xlsx.load(data);
+                const worksheet = workbook.getWorksheet(1); // 获取第一个工作表
+                // 解析工作表数据
+                const jsonData = [];
+                worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+                    if (rowNumber > 0) {
+                        jsonData.push(row.values);
+                    }
+                });
+                AcsGetVideoTitle(jsonData);
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    };
+
     return (
         <div>
             <h4>XLSX文件上传和解析示例</h4>
@@ -127,14 +141,6 @@ export default function File() {
                 <input type="file" accept=".xlsx" onChange={handleFileword} />
             </div>
             <div style={{ borderTop: '1px solid #ccc' }}>
-                <h4>上传邮箱：</h4>
-                <input
-                    type="file"
-                    accept=".xlsx"
-                    onChange={handleUploadEmail}
-                />
-            </div>
-            <div style={{ borderTop: '1px solid #ccc' }}>
                 <h4>koc视频数据拉取</h4>
                 <button onClick={handleUploadKoc}>开</button>
             </div>
@@ -144,6 +150,14 @@ export default function File() {
                     type="file"
                     accept=".xlsx"
                     onChange={handleUploadKocAmount}
+                />
+            </div>
+            <div style={{ borderTop: '1px solid #ccc' }}>
+                <h4>acs获取标题</h4>
+                <input
+                    type="file"
+                    accept=".xlsx"
+                    onChange={handleUploadAcsGetVideoTitle}
                 />
             </div>
         </div>

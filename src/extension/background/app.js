@@ -8,6 +8,8 @@ import './messenger/kocVideo';
 
 import './messenger/kocVideos';
 
+import './messenger/acsVideoTitle';
+
 import BrowserStorage from 'shared/browser-storage';
 
 window.BrowserStorage = BrowserStorage;

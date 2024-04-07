@@ -20,10 +20,15 @@ export function GetKocVideoSupplement(data) {
     return Messenger.send('kocs', { action: 'start', data }, { to: 'bg' });
 }
 
+export function AcsGetVideoTitle(data) {
+    return Messenger.send('acs', { action: 'start', data }, { to: 'bg' });
+}
+
 export default {
     push,
     UploadCrm,
     GetRedskinsInfo,
     GetKocVideoData,
     GetKocVideoSupplement,
+    AcsGetVideoTitle,
 };

@@ -11,3 +11,5 @@ import './messenger/redskins';
 import './messenger/kocVideo';
 
 import './messenger/kocVideos';
+
+import './messenger/acsVideoTitle';
