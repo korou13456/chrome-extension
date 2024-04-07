@@ -57,9 +57,9 @@ const startDetectionFun = () => {
             TextArr.push(text);
         }
 
-        if (TextArr.length >= 100) {
-            return Func(TextArr);
-        }
+        // if (TextArr.length >= 100) {
+        //     return Func(TextArr);
+        // }
     }
     window.scrollTo(0, document.body.scrollHeight);
 

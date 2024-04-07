@@ -8,6 +8,7 @@ Messenger.on('acs', async (message) => {
     switch (action) {
         case 'start':
             // redskins(data);
+            console.log(data, '!---====><>>>');
             acsVideoTitle('', data);
             break;
         case 'detection':

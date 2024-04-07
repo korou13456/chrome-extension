@@ -45,18 +45,22 @@ export default async function acsVideoTitle(action, data, id) {
                 if (num >= Data.length) {
                     return '结束';
                 }
-                // const [, domain] = [...Data[num]];
-                goDomain(Data[num]);
+                const [, domain] = [...Data[num]];
+                const { richText } = { ...domain };
+                const { text } = { ...richText[0] };
+                goDomain(text);
             })();
             break;
         default:
             (() => {
-                // Data = data;
+                Data = data;
                 if (num >= Data.length) {
                     return '结束';
                 }
-                // const [, domain] = [...Data[num]];
-                goDomain(Data[num]);
+                const [, domain] = [...Data[num]];
+                const { richText } = { ...domain };
+                const { text } = { ...richText[0] };
+                goDomain(text);
             })();
             break;
     }
@@ -95,7 +99,7 @@ async function Fun(list = [], name) {
     worksheet.addRow(['Title']);
 
     list.forEach((item) => {
-        worksheet.addRow([item]);
+        worksheet.addRow(['https://www.tiktok.com/@' + item]);
     });
 
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -113,7 +117,7 @@ async function Fun(list = [], name) {
     const message = {
         msg_type: 'text',
         content: {
-            text: '完成抓取' + num + '条，注意查看',
+            text: name + '完成抓取' + num + '条，注意查看',
         },
     };
     await axios.post(webhookUrl, message);
